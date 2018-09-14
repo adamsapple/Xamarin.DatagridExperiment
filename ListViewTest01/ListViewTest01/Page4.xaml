@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dg="clr-namespace:Zumero;assembly=Zumero.DataGrid"
+             xmlns:local="clr-namespace:ListViewTest01"
+             x:Class="ListViewTest01.Page4">
+    <ContentPage.BindingContext>
+        <local:ViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness" iOS="0,20,0,0" />
+    </ContentPage.Padding>
+    <ContentPage.Content>
+        <!--<StackLayout VerticalOptions="FillAndExpand">
+            <ScrollView x:Name="myScrollView" VerticalOptions="FillAndExpand">
+                
+            </ScrollView>
+        </StackLayout>-->
+        <dg:DataGrid x:Name="Grid1"
+                     SelectionMode="Row" BackgroundColor="Transparent" ColumnSpacing="0" RowSpacing="0" RowHeight="36" HeaderHeight="36">
+            <dg:DataGrid.FrozenColumn>
+                <dg:Column Width="80">
+                    <dg:Column.HeaderView>
+                        <Label Text="Id" BackgroundColor="Yellow"></Label>
+                    </dg:Column.HeaderView>
+                    <dg:Column.Template>
+                        <DataTemplate>
+                            <Label Text="{Binding Id}" TextColor="Black" XAlign="Center" YAlign="Center"></Label>
+                        </DataTemplate>
+                    </dg:Column.Template>
+                </dg:Column>
+            </dg:DataGrid.FrozenColumn>
+
+            <dg:DataGrid.Columns>
+                <dg:Column Width="100">
+                    <dg:Column.HeaderView>
+                        <Label Text="Data1" TextColor="Black" XAlign="Center" YAlign="Center"/>
+                    </dg:Column.HeaderView>
+                    <dg:Column.Template>
+                        <DataTemplate>
+                            <Label Text="{Binding Data01}" TextColor="Black" XAlign="Center" YAlign="Center" />
+                        </DataTemplate>
+                    </dg:Column.Template>
+                </dg:Column>
+
+                <dg:Column Width="100">
+                    <dg:Column.HeaderView>
+                        <Label Text="Data2" TextColor="Black" XAlign="Center" YAlign="Center" />
+                    </dg:Column.HeaderView>
+                    <dg:Column.Template>
+                        <DataTemplate>
+                            <Label Text="{Binding Data02}" TextColor="Black" XAlign="Center" YAlign="Center"></Label>
+                            <!--<Label Text="{Binding Data02}" BackgroundColor="{Binding SpanishBackgroundColor}" TextColor="Black" XAlign="Center" YAlign="Center"></Label>-->
+                        </DataTemplate>
+                    </dg:Column.Template>
+                </dg:Column>
+                <dg:Column Width="100">
+                    <dg:Column.HeaderView>
+                        <Label Text="Data3"  TextColor="Black" XAlign="Center" YAlign="Center" />
+                    </dg:Column.HeaderView>
+                    <dg:Column.Template>
+                        <DataTemplate>
+                            <Label Text="{Binding Data03}" TextColor="Black" XAlign="Center" YAlign="Center"></Label>
+                            <!--<Label Text="{Binding Data02}" BackgroundColor="{Binding SpanishBackgroundColor}" TextColor="Black" XAlign="Center" YAlign="Center"></Label>-->
+                        </DataTemplate>
+                    </dg:Column.Template>
+                </dg:Column>
+                <dg:Column Width="100">
+                    <dg:Column.HeaderView>
+                        <Label Text="Data4" TextColor="Black" XAlign="Center" YAlign="Center" />
+                    </dg:Column.HeaderView>
+                    <dg:Column.Template>
+                        <DataTemplate>
+                            <Label Text="{Binding Data04}" TextColor="Black" XAlign="Center" YAlign="Center"></Label>
+                            <!--<Label Text="{Binding Data02}" BackgroundColor="{Binding SpanishBackgroundColor}" TextColor="Black" XAlign="Center" YAlign="Center"></Label>-->
+                        </DataTemplate>
+                    </dg:Column.Template>
+                </dg:Column>
+                <dg:Column Width="100">
+                    <dg:Column.HeaderView>
+                        <Label Text="Data5" TextColor="Black" XAlign="Center" YAlign="Center" />
+                    </dg:Column.HeaderView>
+                    <dg:Column.Template>
+                        <DataTemplate>
+                            <Label Text="{Binding Data05}" TextColor="Black" XAlign="Center" YAlign="Center"></Label>
+                            <!--<Label Text="{Binding Data02}" BackgroundColor="{Binding SpanishBackgroundColor}" TextColor="Black" XAlign="Center" YAlign="Center"></Label>-->
+                        </DataTemplate>
+                    </dg:Column.Template>
+                </dg:Column>
+            </dg:DataGrid.Columns>
+        </dg:DataGrid>
+    </ContentPage.Content>
+</ContentPage>

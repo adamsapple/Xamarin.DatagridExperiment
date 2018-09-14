@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ListViewTest01"
+             xmlns:xlabctrl="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+             xmlns:dg="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
+             x:Class="ListViewTest01.Page1">
+    <ContentPage.BindingContext>
+        <local:ViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!--<Style TargetType="ContentPage">
+                <Setter Property="Padding">
+                    <OnPlatform x:TypeArguments="Thickness" iOS="0,20,0,0" />
+                </Setter>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="HeightRequest" Value="100" />
+                <Setter Property="WidthRequest" Value="600" />
+                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="Accent" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="AntiqueWhite" />
+                <Setter Property="HeightRequest" Value="75" />
+                <Setter Property="WidthRequest" Value="250" />
+                <Setter Property="Margin" Value="0,5,0,15" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>-->
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness" iOS="0,20,0,0" />
+    </ContentPage.Padding>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="ScrollView サンプル" 
+                   TextColor="Accent" BackgroundColor="Transparent" />
+            <ScrollView x:Name="ScrollViewV"
+                        Orientation="Vertical"
+                        BackgroundColor="Yellow">
+
+                <Grid x:Name="Grid1" ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="32"/>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <dg:DataGrid x:Name="DataGrid1"  Grid.Column="0"
+                                 ItemsSource="{Binding Items}"
+                                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                 SortedColumnIndex="{Binding SortData}"
+                                 HeaderHeight="24" HeaderBackground="AliceBlue" 
+                                 RowHeight="40"  BackgroundColor="White"
+                                 SelectionEnabled="true"
+                                 IsSortable="True"
+                                 HeaderBordersVisible="False"
+                                 ItemSelected="DataGrid1_ItemSelected"
+                                 ActiveRowColor="White"
+                                 ColumnSpacing="0" 
+                                 RowSpacing="0"
+                                 Padding="0" 
+                                 Margin="0" 
+                                 BorderColor="SkyBlue"
+                                 BorderThickness="0,0,0,0.5">
+                        <dg:DataGrid.Columns>
+                            <dg:DataGridColumn Title="Id"   PropertyName="Id" Width="32">
+                                <dg:DataGridColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Text="{Binding}"  HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
+                                    </DataTemplate>
+                                </dg:DataGridColumn.CellTemplate>
+                            </dg:DataGridColumn>
+                            <dg:DataGridColumn Title=""     PropertyName="Data01" Width="0" />
+                            <dg:DataGridColumn Title=""     PropertyName="Data02" Width="0" />
+                            <dg:DataGridColumn Title=""     PropertyName="Data03" Width="0" />
+                            <dg:DataGridColumn Title=""     PropertyName="Data04" Width="0" />
+                        </dg:DataGrid.Columns>
+                        <dg:DataGrid.RowsBackgroundColorPalette>
+                            <dg:PaletteCollection>
+                                <Color>#FFFFFF</Color>
+                            </dg:PaletteCollection>
+                        </dg:DataGrid.RowsBackgroundColorPalette>
+                    </dg:DataGrid>
+                    <!--<local:RepeaterView x:Name="listView00"  Grid.Column="0"
+                                            ItemsSource="{Binding Items}">
+                        <local:RepeaterView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout Padding="10" Orientation="Horizontal">
+                                        <Label Text="{Binding Id}"/>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </local:RepeaterView.ItemTemplate>
+                    </local:RepeaterView>-->
+                    <ScrollView x:Name="ScrollViewH" Grid.Column="1"
+                                Orientation="Horizontal"
+                                BackgroundColor="Yellow">
+                        <dg:DataGrid x:Name="DataGrid2"
+                                     ItemsSource="{Binding Items}"
+                                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                     SortedColumnIndex="{Binding SortData}"
+                                     HeaderHeight="24" HeaderBackground="AliceBlue" 
+                                     RowHeight="40"  BackgroundColor="White"
+                                     SelectionEnabled="true"
+                                     HeaderBordersVisible="False"
+                                     ItemSelected="DataGrid2_ItemSelected"
+                                     ActiveRowColor="White"
+                                     ColumnSpacing="0" 
+                                     RowSpacing="0"
+                                     Padding="0,0,0,0" 
+                                     Margin="0" 
+                                     BorderColor="SkyBlue"
+                                     BorderThickness="0,0,0,0.5">
+                            <dg:DataGrid.Columns>
+                                <dg:DataGridColumn Title=""     PropertyName="Id" Width="0" />
+                                <dg:DataGridColumn Title="Data01"     PropertyName="Data01" Width="130" />
+                                <dg:DataGridColumn Title="Data02"     PropertyName="Data02" Width="130" />
+                                <dg:DataGridColumn Title="Data03"     PropertyName="Data03" Width="130" />
+                                <dg:DataGridColumn Title="Data04"     PropertyName="Data04" Width="130" />
+                            </dg:DataGrid.Columns>
+                            <dg:DataGrid.RowsBackgroundColorPalette>
+                                <dg:PaletteCollection>
+                                    <Color>#FFFFFF</Color>
+                                </dg:PaletteCollection>
+                            </dg:DataGrid.RowsBackgroundColorPalette>
+                        </dg:DataGrid>
+                        <!--<local:RepeaterView x:Name="listView01"
+                                            ItemsSource="{Binding Items}">
+                            <local:RepeaterView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout Padding="10" Orientation="Horizontal">
+                                            <Label Text="{Binding Data01}"/>
+                                            <Label Text="{Binding Data02}"/>
+                                            <Label Text="{Binding Data03}"/>
+                                            <Label Text="{Binding Data04}"/>
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </local:RepeaterView.ItemTemplate>
+                        </local:RepeaterView>-->
+                    </ScrollView>
+                </Grid>
+            </ScrollView>
+            <Button Clicked="Button_Clicked" Text="Label07までスクロール" />
+        </StackLayout>
+        <!--<StackLayout>
+            
+                <ListView x:Name="listView1"
+                          ItemsSource="{Binding Items}"
+                          Header="ここがヘッダ－"
+                          Footer="ここがフッター">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Padding="10" Orientation="Horizontal">
+                                    <Label Text="{Binding Id}"/>
+                                    <Label Text="{Binding Data01}"/>
+                                    <Label Text="{Binding Data02}"/>
+                                    <Label Text="{Binding Data03}"/>
+                                    <Label Text="{Binding Data04}"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            
+            <Button Text="add"
+                    Clicked="Button_Clicked"
+                    VerticalOptions="End"/>
+        </StackLayout>-->
+    </ContentPage.Content>
+</ContentPage>

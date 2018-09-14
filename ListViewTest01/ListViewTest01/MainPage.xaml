@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ListViewTest01"
+             xmlns:cv="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
+             xmlns:dg="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
+             x:Class="ListViewTest01.MainPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <x:Array Type="{x:Type StackLayout}" x:Key="ToolBars" >
+                <StackLayout Orientation="Horizontal">
+                    <ListView>
+
+                    </ListView>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <ListView>
+
+                    </ListView>
+                </StackLayout>
+            </x:Array>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <local:ViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness" iOS="0,20,0,0" />
+    </ContentPage.Padding>
+    <ContentPage.Content>
+        <RelativeLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout
+    			 RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0}"
+    			 RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height,Factor=1.0}" 
+    			 VerticalOptions="FillAndExpand" 
+    			 Spacing="0" 
+    			 Padding="0,0,0,0">
+                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <ScrollView x:Name="ScrollView1"
+                                Orientation="Both" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                        <dg:DataGrid x:Name="DataGrid1" 
+                                     ItemsSource="{Binding Items}"
+                                     SelectedItem="{Binding SelectedItem}"
+                                     BorderColor="Transparent"
+                                     HeaderHeight="24" HeaderBackground="AliceBlue" 
+                                     RowHeight="40"  BackgroundColor="Transparent"
+                                     SelectionEnabled="true"
+                                     HeaderBordersVisible="False"
+                                     ItemSelected="DataGrid1_ItemSelected"
+                                     ColumnSpacing="0" 
+                                     RowSpacing="1"
+                                     Padding="0,0,0,0" 
+                                     Margin="1" 
+                                     BorderThickness="1">
+                            <dg:DataGrid.Columns>
+                                <dg:DataGridColumn Title="Id"     PropertyName="Id" Width="50" />
+                                <dg:DataGridColumn Title="Data-01" PropertyName="Data01" Width="100" />
+                                <dg:DataGridColumn Title="Data-02" PropertyName="Data02" Width="100" />
+                                <dg:DataGridColumn Title="Data-03" PropertyName="Data03" Width="100" />
+                                <dg:DataGridColumn Title="Data-04" PropertyName="Data04" Width="100" />
+                                <dg:DataGridColumn Title="Data-05" PropertyName="Data05" Width="100" />
+                                <dg:DataGridColumn Title="Data-04" PropertyName="Data04" Width="100" />
+                                <dg:DataGridColumn Title="Sector1" PropertyName="Data03" Width="1" />
+                                <dg:DataGridColumn Title="Sector2" PropertyName="Data04" Width="1" />
+                                <dg:DataGridColumn Title="Sector3" PropertyName="Data05" Width="1" />
+                                <!--<dg:DataGridColumn Title="Data02" PropertyName="Data01" Width="100" />
+                        <dg:DataGridColumn Title="Data03" PropertyName="Data01" Width="100" />
+                        <dg:DataGridColumn Title="Data04" PropertyName="Data01" Width="100" />
+                        <dg:DataGridColumn Title="Data05" PropertyName="Data01" Width="100" />
+                        <dg:DataGridColumn Title="Data06" PropertyName="Data01" Width="100" />-->
+                            </dg:DataGrid.Columns>
+                            <dg:DataGrid.RowsBackgroundColorPalette>
+                                <dg:PaletteCollection>
+                                    <Color>#F8F8F8</Color>
+                                    <Color>#FFFFFF</Color>
+                                </dg:PaletteCollection>
+                            </dg:DataGrid.RowsBackgroundColorPalette>
+                        </dg:DataGrid>
+                    </ScrollView>
+                    <Button Text="addC" Clicked="Button_Clicked"/>
+                    <Button Text="aaaaa" Clicked="AddColumn"/>
+                    <!--<Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+            
+            <ListView x:Name="listView00" Grid.Column="0"
+                      ItemsSource="{Binding Items}"
+                      WidthRequest="50"
+                      BackgroundColor="AliceBlue"
+                      Header="ここがヘッダ－"
+                      Footer="ここがフッター">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="10" WidthRequest="50"
+                                         BackgroundColor="Azure">
+                                <Label Text="{Binding Id}"  WidthRequest="50" BackgroundColor="Blue"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>-->
+                    <!--<ListView x:Name="listView01" Grid.Column="1"
+                      ItemsSource="{Binding Items}"
+                      Header="ここがヘッダ－"
+                      Footer="ここがフッター">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="10">
+                                <Label Text="{Binding Data01}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>-->
+                    <!-- Place new controls here -->
+                    <!--<
+            <ListView x:Name="listView"
+                      ItemsSource="{Binding Items}"
+                      Header="ここがヘッダ－"
+                      Footer="ここがフッター">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="10">
+                                <Label Text="{Binding Id}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                ListView.FooterTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding Items}"
+               FontSize="30"/>
+                    </DataTemplate>
+            </ListView>-->
+                    <!--<cv:CarouselViewControl ShowArrows="True" ArrowsTintColor="Orange" ArrowsBackgroundColor="Transparent" ArrowsTransparency="0.5"
+                                HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" HeightRequest="40">
+            </cv:CarouselViewControl>-->
+                </StackLayout>
+            </StackLayout>
+        </RelativeLayout>
+    </ContentPage.Content>
+</ContentPage>

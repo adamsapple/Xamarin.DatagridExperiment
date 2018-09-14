@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ListViewTest01"
+             xmlns:xlabctrl="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+             x:Class="ListViewTest01.Page3">
+    <ContentPage.BindingContext>
+        <local:ViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="ContentPage">
+                <Setter Property="Padding">
+                    <OnPlatform x:TypeArguments="Thickness" iOS="0,20,0,0" />
+                </Setter>
+            </Style>
+            <!--<Style TargetType="Label">
+                <Setter Property="HeightRequest" Value="100" />
+                <Setter Property="WidthRequest" Value="600" />
+                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="Accent" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="Margin" Value="0" />
+            </Style>-->
+            <!--<Style TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="AntiqueWhite" />
+                <Setter Property="HeightRequest" Value="75" />
+                <Setter Property="WidthRequest" Value="250" />
+                <Setter Property="Margin" Value="0,5,0,15" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>-->
+            <StyleSheet>
+                <![CDATA[
+                    .grid_th {
+                        height:40;
+                    }
+                    .grid_tr {
+                        height:40;
+                    }
+                
+                    .col_id {
+                        width: 40;
+                    }
+                
+                    .col_time {
+                        margin-left:0;  
+                        margin-right:0;
+                        width: 100;
+                    }
+                ]]>
+            </StyleSheet>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness" iOS="0,20,0,0" />
+    </ContentPage.Padding>
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="FillAndExpand">
+            <Label Text="ScrollView サンプル" 
+                   TextColor="Accent" BackgroundColor="Transparent" />
+            <ScrollView x:Name="ScrollViewV"
+                        Orientation="Vertical">
+                <!--<AbsoluteLayout>-->
+                <Grid ColumnSpacing="0" RowSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackLayout x:Name="FreezeColumn"
+                                 Orientation="Vertical" Grid.Column="0" 
+                                 Padding="0" Margin="0" 
+                                 BackgroundColor="Yellow">
+                        <StackLayout x:Name="Header00"
+                                     StyleClass="grid_th" Padding="0" Margin="0" BackgroundColor="LightSkyBlue" >
+                            <local:ClickableLabel x:Name="col0" ColmnName="Id" Clicked="ClickableLabel_Clicked"
+                                                  StyleClass="col_id" BackgroundColor="Beige" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+                        </StackLayout>
+                        <local:RepeaterView x:Name="listView00" Padding="0"
+                                            ItemsSource="{Binding Items}">
+                            <!--x:TypeArguments="local:ListViewItem"-->
+                            <local:RepeaterView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout StyleClass="grid_tr" Padding="0" Margin="0">
+                                            <Label Text="{Binding Id}" StyleClass="col_id" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </local:RepeaterView.ItemTemplate>
+                        </local:RepeaterView>
+                    </StackLayout>
+
+                    <local:ScrollViewEx x:Name="ScrollViewH"
+                                        Orientation="Horizontal" BackgroundColor="White" Grid.Column="1">
+                        <StackLayout Orientation="Vertical" Padding="0" Margin="0">
+                            <StackLayout x:Name="Header01"
+                                         Orientation="Horizontal" StyleClass="grid_th" Padding="0" Margin="0" BackgroundColor="LightSkyBlue">
+                                <!--<Label Text="{Binding Id}"/>-->
+                                <local:ClickableLabel x:Name="col1" ColmnName="Data01" Clicked="ClickableLabel_Clicked" StyleClass="col_time" BackgroundColor="Beige" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                                <local:ClickableLabel x:Name="col2" ColmnName="Data02" Clicked="ClickableLabel_Clicked" StyleClass="col_time" BackgroundColor="Beige" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                                <local:ClickableLabel x:Name="col3" ColmnName="Data03" Clicked="ClickableLabel_Clicked" StyleClass="col_time" BackgroundColor="Beige" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                                <local:ClickableLabel x:Name="col4" ColmnName="Data04" Clicked="ClickableLabel_Clicked" StyleClass="col_time" BackgroundColor="Beige" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                                <local:ClickableLabel x:Name="col5" ColmnName="Data05" Clicked="ClickableLabel_Clicked" StyleClass="col_time" BackgroundColor="Beige" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                            </StackLayout>
+                            <local:RepeaterView x:Name="listView01"
+                                             >
+                                <!--x:TypeArguments="local:ListViewItem"-->
+                                <local:RepeaterView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <StackLayout StyleClass="grid_tr" Orientation="Horizontal" Padding="0" Margin="0">
+                                                <!--<Label Text="{Binding Id}"/>-->
+                                                <Label Text="{Binding Data01}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"/>
+                                                <Label Text="{Binding Data02}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"/>
+                                                <Label Text="{Binding Data03}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"/>
+                                                <Label Text="{Binding Data04}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"/>
+                                                <Label Text="{Binding Data05}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"/>
+                                            </StackLayout>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </local:RepeaterView.ItemTemplate>
+                            </local:RepeaterView>
+                        </StackLayout>
+                    </local:ScrollViewEx>
+                </Grid>
+                <!--<StackLayout Padding="10" Orientation="Horizontal">
+                        <Button Text=" Id"/>
+                        <Button Text=" Data01"/>
+                        <Button Text=" Data02"/>
+                        <Button Text=" Data03"/>
+                        <Button Text=" Data04"/>
+                    </StackLayout>-->
+                <!--</AbsoluteLayout>-->
+            </ScrollView>
+            <Button Clicked="Button_Clicked" Text="Label07までスクロール" />
+        </StackLayout>
+        <!--<StackLayout>
+            
+                <ListView x:Name="listView1"
+                          ItemsSource="{Binding Items}"
+                          Header="ここがヘッダ－"
+                          Footer="ここがフッター">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Padding="10" Orientation="Horizontal">
+                                    <Label Text="{Binding Id}"/>
+                                    <Label Text="{Binding Data01}"/>
+                                    <Label Text="{Binding Data02}"/>
+                                    <Label Text="{Binding Data03}"/>
+                                    <Label Text="{Binding Data04}"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            
+            <Button Text="add"
+                    Clicked="Button_Clicked"
+                    VerticalOptions="End"/>
+        </StackLayout>-->
+    </ContentPage.Content>
+</ContentPage>
