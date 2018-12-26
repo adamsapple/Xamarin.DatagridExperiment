@@ -9,12 +9,20 @@ namespace ListViewTest01
     {
         public new event Action<ScrollViewEx, Rectangle> Scrolled;
 
+        /// <summary>
+        /// Updates the bounds.
+        /// </summary>
+        /// <param name="bounds">The bounds.</param>
         public void UpdateBounds(Rectangle bounds)
         {
             Position = bounds.Location;
             Scrolled?.Invoke(this, bounds);
         }
-        
+
+        #region Position Property.
+        /// <summary>
+        /// The position property
+        /// </summary>
         public static readonly BindableProperty PositionProperty =
             BindableProperty.Create(
                 "Position",
@@ -24,30 +32,41 @@ namespace ListViewTest01
                 BindingMode.TwoWay,
                 propertyChanged: null,
                 propertyChanging: null);
-        //validateValue: null,
-        //coerceValue: null);
 
-
-        //    //BindableProperty.Create<ScrollViewWithEvents, Point>(
-        //    //    p => p.Position, default(Point));
-
-        //    public static readonly BindableProperty AnimateScrollProperty =
-        //        BindableProperty.Create(
-        //            "AnimateScroll",
-        //            typeof(bool),
-        //            typeof(ScrollViewEx),
-        //            null);
-
+        /// <summary>
+        /// Gets or sets the position.
+        /// </summary>
+        /// <value>The position.</value>
         public Point Position
         {
             get { return (Point)GetValue(PositionProperty); }
             set { SetValue(PositionProperty, value); }
         }
+        #endregion Position Property.
 
-        //    public bool AnimateScroll
-        //    {
-        //        get { return (bool)GetValue(AnimateScrollProperty); }
-        //        set { SetValue(AnimateScrollProperty, value); }
-        //    }
+        #region AnimateScroll Property.
+        /// <summary>
+		/// The animate scroll property
+		/// </summary>
+		public static readonly BindableProperty AnimateScrollProperty =
+            BindableProperty.Create(
+                    "AnimateScroll",
+                    typeof(bool),
+                    typeof(ScrollViewEx),
+                    false,
+                    BindingMode.TwoWay,
+                    propertyChanged: null,
+                    propertyChanging: null);
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [animate scroll].
+        /// </summary>
+        /// <value><c>true</c> if [animate scroll]; otherwise, <c>false</c>.</value>
+        public bool AnimateScroll
+        {
+            get { return (bool)GetValue(AnimateScrollProperty); }
+            set { SetValue(AnimateScrollProperty, value); }
+        }
+        #endregion AnimateScroll Property.
     }
 }

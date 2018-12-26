@@ -17,7 +17,8 @@
         <StackLayout>
             <Label Text="LapGrid サンプル" 
                    TextColor="Accent" BackgroundColor="Transparent" />
-            <local:LapGrid />
+            <!--<local:LapGrid />-->
+            <local:LapTimeGridView />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

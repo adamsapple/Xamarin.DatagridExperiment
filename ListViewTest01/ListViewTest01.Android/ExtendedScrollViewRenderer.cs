@@ -1,36 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿// ***********************************************************************
+// Assembly         : XLabs.Forms.Droid
+// Author           : XLabs Team
+// Created          : 12-27-2015
+// 
+// Last Modified By : XLabs Team
+// Last Modified On : 01-04-2016
+// ***********************************************************************
+// <copyright file="ExtendedScrollViewRenderer.cs" company="XLabs Team">
+//     Copyright (c) XLabs Team. All rights reserved.
+// </copyright>
+// <summary>
+//       This project is licensed under the Apache 2.0 license
+//       https://github.com/XLabs/Xamarin-Forms-Labs/blob/master/LICENSE
+//       
+//       XLabs is a open source project that aims to provide a powerfull and cross 
+//       platform set of controls tailored to work with Xamarin Forms.
+// </summary>
+// ***********************************************************************
+// 
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+using System;
+using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using ListViewTest01;
-using Android.Animation;
+using XLabs.Forms.Controls;
 
-[assembly: ExportRenderer(typeof(ScrollViewEx), typeof(ListViewTest01.Droid.ScrollViewExRenderer))]
-namespace ListViewTest01.Droid
+[assembly: ExportRenderer(typeof(ExtendedScrollView), typeof(ExtendedScrollViewRenderer))]
+
+namespace XLabs.Forms.Controls
 {
     /// <summary>
     /// Class ExtendedScrollViewRenderer.
     /// </summary>
-    public class ScrollViewExRenderer : ScrollViewRenderer
+    public class ExtendedScrollViewRenderer : ScrollViewRenderer
     {
         /// <summary>
         /// The epsilon.
         /// </summary>
         private const double Epsilon = 0.1;
-
-        public ScrollViewExRenderer(Context context) : base(context)
-        {
-        }
 
         /// <summary>
         /// Handles the <see cref="E:ElementChanged" /> event.
@@ -41,7 +48,7 @@ namespace ListViewTest01.Droid
             base.OnElementChanged(e);
 
             this.ViewTreeObserver.ScrollChanged += (sender, ev) => {
-                var scrollView = (ScrollViewEx)this.Element;
+                var scrollView = (ExtendedScrollView)this.Element;
                 if (scrollView == null)
                     return;
 
@@ -62,12 +69,12 @@ namespace ListViewTest01.Droid
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != ScrollViewEx.PositionProperty.PropertyName)
+            if (e.PropertyName != ExtendedScrollView.PositionProperty.PropertyName)
             {
                 return;
             }
 
-            var scrollView = (ScrollViewEx)this.Element;
+            var scrollView = (ExtendedScrollView)this.Element;
             var position = scrollView.Position;
 
             if (Math.Abs((int)(this.ScrollY - position.Y)) < Epsilon
@@ -80,4 +87,5 @@ namespace ListViewTest01.Droid
             UpdateLayout();
         }
     }
+
 }
