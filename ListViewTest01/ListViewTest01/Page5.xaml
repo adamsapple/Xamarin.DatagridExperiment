@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:ListViewTest01"
+             xmlns:ui="clr-namespace:ListViewTest01.UI"
              x:Class="ListViewTest01.Page5">
     <ContentPage.BindingContext>
         <local:ViewModel />
@@ -18,7 +19,7 @@
             <Label Text="LapGrid サンプル" 
                    TextColor="Accent" BackgroundColor="Transparent" />
             <!--<local:LapGrid />-->
-            <local:LapTimeGridView />
+            <ui:LapTimeGridView />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

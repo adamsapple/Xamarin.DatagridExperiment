@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:ListViewTest01.UI"
+             x:Class="ListViewTest01.UI.LapTimeGridView">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <x:Double x:Key="HeaderWidth">50</x:Double>
+            <x:Double x:Key="HeaderHeight">40</x:Double>
+            <x:Double x:Key="RowHeight">20</x:Double>
+            <Style TargetType="ContentPage">
+                <Setter Property="Padding">
+                    <OnPlatform x:TypeArguments="Thickness" iOS="0,20,0,0" />
+                </Setter>
+            </Style>
+            <!--<Style TargetType="Label">
+                <Setter Property="HeightRequest" Value="100" />
+                <Setter Property="WidthRequest" Value="600" />
+                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="Accent" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" /> 
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="Margin" Value="0" />
+            </Style>-->
+            <!--<Style TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="AntiqueWhite" />
+                <Setter Property="HeightRequest" Value="75" />
+                <Setter Property="WidthRequest" Value="250" />
+                <Setter Property="Margin" Value="0,5,0,15" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>-->
+            <StyleSheet>
+                <![CDATA[
+                    .grid_th {
+                        height:40;
+                    }
+                    .grid_tr {
+                        height:40;
+                    }
+                    .header_col {
+                        background-color: azure;
+                    }
+                    .col_id {
+                        background-color: aliceblue;
+                    }
+                
+                    .col_time {
+                        margin-left:0;  
+                        margin-right:0;
+                        width: 110;
+                    }
+                    stacklayout {
+                        margin: 0;
+                        padding: 0;
+                    }
+                ]]>
+            </StyleSheet>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <StackLayout>
+            <!--
+            ヘッダ
+            -->
+            <!--<StackLayout Orientation="Horizontal" Padding="0" Margin="0">-->
+            <Grid x:Name="Header"
+                  RowSpacing="0" ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{StaticResource Key=HeaderWidth}" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{StaticResource Key=HeaderHeight}" />
+                </Grid.RowDefinitions>
+                <!--
+                固定カラム
+                -->
+                
+                <ui:ClickableLabel x:Name="col0"
+                                   Grid.Column="0" Grid.Row="0"
+                                   ColmnName="Id" Clicked="HeaderColumn_Clicked" StyleClass="header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                <!--
+                スクロールカラム
+                -->
+                <ui:HideHBarScrollView x:Name="HeaderScrollViewH"
+                                       Grid.Column="1" Grid.Row="0"
+                                       Orientation="Horizontal" Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
+                    <StackLayout x:Name="Header01"
+                                 Orientation="Horizontal" StyleClass="grid_th" Padding="0" Margin="0">
+                        <ui:ClickableLabel x:Name="col1" ColmnName="Data01" Clicked="HeaderColumn_Clicked" StyleClass="col_time, header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                        <ui:ClickableLabel x:Name="col2" ColmnName="Data02" Clicked="HeaderColumn_Clicked" StyleClass="col_time, header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                        <ui:ClickableLabel x:Name="col3" ColmnName="Data03" Clicked="HeaderColumn_Clicked" StyleClass="col_time, header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                        <ui:ClickableLabel x:Name="col4" ColmnName="Data04" Clicked="HeaderColumn_Clicked" StyleClass="col_time, header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                        <ui:ClickableLabel x:Name="col5" ColmnName="Data05" Clicked="HeaderColumn_Clicked" StyleClass="col_time, header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                    </StackLayout>
+                </ui:HideHBarScrollView>
+            </Grid>
+            <!--
+            ボディ
+            -->
+            <ScrollView x:Name="BodyScrollViewV"
+                        Orientation="Vertical">
+                <!--<StackLayout Orientation="Horizontal" Padding="0" Margin="0">-->
+                <Grid x:Name="Body"
+                      RowSpacing="0" ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{StaticResource Key=HeaderWidth}" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <!--
+                    固定カラム
+                    -->
+                    <ui:RepeaterView x:Name="listView00"
+                                     ItemsSource="{Binding Items}"
+                                     Grid.Column="0" Grid.Row="0"
+                                     StyleClass="col_id" Padding="0" Margin="0" BackgroundColor="Green">
+                        <!--x:TypeArguments="local:ListViewItem"-->
+                        <ui:RepeaterView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout HeightRequest="{StaticResource Key=RowHeight}" Padding="0" Margin="0" BackgroundColor="Aqua">
+                                        <Label Text="{Binding Id}" BackgroundColor="Beige" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ui:RepeaterView.ItemTemplate>
+                    </ui:RepeaterView>
+                    <!--
+                    スクロールカラム
+                    -->
+                    <ui:ScrollViewEx x:Name="BodyScrollViewH"
+                                     AnimateScroll="True"
+                                     Grid.Column="1" Grid.Row="0"
+                                     Orientation="Horizontal"
+                                     HorizontalOptions="FillAndExpand" BackgroundColor="White">
+                        <!--<StackLayout Orientation="Vertical" Padding="0" Margin="0">-->
+                            <ui:RepeaterView x:Name="listView01" UniqueId="Id"
+                                             Padding="0" Margin="0">
+                                <!--x:TypeArguments="local:ListViewItem"-->
+                                <ui:RepeaterView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <StackLayout HeightRequest="{StaticResource Key=RowHeight}" Orientation="Horizontal" Padding="0" Margin="0">
+                                                <!--<Label Text="{Binding Id}"/>-->
+                                                <Label Text="{Binding Data01}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"/>
+                                                <Label Text="{Binding Data02}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"/>
+                                                <Label Text="{Binding Data03}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"/>
+                                                <Label Text="{Binding Data04}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"/>
+                                                <Label Text="{Binding Data05}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"/>
+                                            </StackLayout>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ui:RepeaterView.ItemTemplate>
+                            </ui:RepeaterView>
+                        <!--</StackLayout>-->
+                    </ui:ScrollViewEx>
+                </Grid>
+            </ScrollView>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

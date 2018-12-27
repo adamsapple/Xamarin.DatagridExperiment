@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xamarin.Forms;
 
-namespace ListViewTest01
+namespace ListViewTest01.UI
 {
     public class ClickableLabel : Label
     {
@@ -28,6 +28,7 @@ namespace ListViewTest01
                         }
                     }
                 );
+
         /// <summary>
         /// Gets or sets the item template.
         /// </summary>

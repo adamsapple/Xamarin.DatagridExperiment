@@ -12,11 +12,12 @@ using Android.Views;
 using Android.Widget;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using ListViewTest01;
+using ListViewTest01.UI;
+using ListViewTest01.UI.Droid;
 using Android.Animation;
 
-[assembly: ExportRenderer(typeof(ScrollViewEx), typeof(ListViewTest01.Droid.ScrollViewExRenderer))]
-namespace ListViewTest01.Droid
+[assembly: ExportRenderer(typeof(ScrollViewEx), typeof(ScrollViewExRenderer))]
+namespace ListViewTest01.UI.Droid
 {
     /// <summary>
     /// Class ExtendedScrollViewRenderer.
@@ -30,6 +31,16 @@ namespace ListViewTest01.Droid
 
         public ScrollViewExRenderer(Context context) : base(context)
         {
+            this.ViewTreeObserver.ScrollChanged += (sender, ev) => {
+                var scrollView = (ScrollViewEx)this.Element;
+                if (scrollView == null)
+                {
+                    return;
+                }
+
+                var bounds = new Rectangle(this.ScrollX, this.ScrollY, GetChildAt(0).Width, GetChildAt(0).Height);
+                scrollView.UpdateBounds(bounds);
+            };
         }
 
         /// <summary>
@@ -40,17 +51,11 @@ namespace ListViewTest01.Droid
         {
             base.OnElementChanged(e);
 
-            this.ViewTreeObserver.ScrollChanged += (sender, ev) => {
-                var scrollView = (ScrollViewEx)this.Element;
-                if (scrollView == null)
-                    return;
-
-                var bounds = new Rectangle(this.ScrollX, this.ScrollY, GetChildAt(0).Width, GetChildAt(0).Height);
-                scrollView.UpdateBounds(bounds);
-            };
 
             if (e.OldElement != null)
+            {
                 e.OldElement.PropertyChanged -= OnElementPropertyChanged;
+            }
 
             e.NewElement.PropertyChanged += OnElementPropertyChanged;
         }
@@ -62,13 +67,18 @@ namespace ListViewTest01.Droid
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            //if (ChildCount > 0)
+            //{
+            //    GetChildAt(0).HorizontalScrollBarEnabled = false;
+            //}
+
             if (e.PropertyName != ScrollViewEx.PositionProperty.PropertyName)
             {
                 return;
             }
 
             var scrollView = (ScrollViewEx)this.Element;
-            var position = scrollView.Position;
+            var position   = scrollView.Position;
 
             if (Math.Abs((int)(this.ScrollY - position.Y)) < Epsilon
                 && Math.Abs((int)(this.ScrollX - position.X)) < Epsilon)

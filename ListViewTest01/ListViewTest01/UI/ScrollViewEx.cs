@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xamarin.Forms;
 
-namespace ListViewTest01
+namespace ListViewTest01.UI
 {
     public class ScrollViewEx : ScrollView
     {

@@ -6,8 +6,9 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Text;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
-namespace ListViewTest01
+namespace ListViewTest01.UI
 {
     /// <summary>
     /// Repeater view.
@@ -81,26 +82,68 @@ namespace ListViewTest01
             set => this.SetValue(ItemTemplateProperty, value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public static BindableProperty SelectedItemProperty =
+            BindableProperty.Create(
+                nameof(SelectedItem),
+                typeof(object),
+                typeof(RepeaterView),
+                null,
+                propertyChanged:  UpdateSelected);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public object SelectedItem
+        {
+            get { return (object)GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
+        }
+
+        private View SelectedContent { get; set; }
+
+        /// <summary>
+        /// SelectedIndexProperty
+        /// </summary>
+        public static BindableProperty SelectedIndexProperty =
+            BindableProperty.Create(
+                nameof(SelectedIndex),
+                typeof(int),
+                typeof(RepeaterView),
+                -1);
+
+        /// <summary>
+        /// SelectedIndex
+        /// </summary>
+        public int SelectedIndex
+        {
+            get { return (int)GetValue(SelectedIndexProperty); }
+            set { SetValue(SelectedIndexProperty, value); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string UniqueId { get; set; } = "Id";
+
+        public IEnumerable SelfOrMasterItemsSource => ItemsSource ?? Master?.ItemsSource;
+
         public void Refresh()
         {
-            var items = this.ItemsSource?.Cast<object>().ToArray();
-
-            if (Master != null)
-            {
-                items = Master.ItemsSource?.Cast<object>().ToArray();
-            }
+            var itemsSource = SelfOrMasterItemsSource?.Cast<object>().ToArray();
 
             // Clean
             this.Children.Clear();
 
             // Only populate once both properties are received
-            if (items == null)
+            if (itemsSource == null)
             {
                 return;
             }
 
-
-            foreach (var viewModel in items)
+            foreach (var viewModel in itemsSource)
             {
                 var content = this.ItemTemplate.CreateContent();
                 if (!(content is View) && !(content is ViewCell))
@@ -111,8 +154,36 @@ namespace ListViewTest01
 
                 var view = content is View ? content as View :
                                              ((ViewCell)content).View;
+                view.Margin = new Thickness(0);
                 view.BindingContext = viewModel;
+                if (!view.GestureRecognizers.Any())
+                {
+                    var tapGestureRecognizer = new TapGestureRecognizer();
+                    //tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandProperty, "TapCommand");
+                    tapGestureRecognizer.Command = new Command(x =>
+                    {
+                        System.Diagnostics.Debug.WriteLine(x);
 
+                        if (SelectedContent != null)
+                        {
+                            SelectedContent.BackgroundColor = Color.Transparent;
+                        }
+
+                        if (SelectedItem == viewModel)
+                        {
+                            SelectedItem    = null;
+                            SelectedContent = null;
+
+                            return;
+                        }
+
+                        SelectedItem    = viewModel;
+                        SelectedContent = view;
+                        SelectedContent.BackgroundColor = Color.Red;
+                    });
+                    tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandParameterProperty, UniqueId);
+                    view.GestureRecognizers.Add(tapGestureRecognizer);
+                }
                 this.Children.Add(view);
             }
 
@@ -159,6 +230,25 @@ namespace ListViewTest01
                 }
             }
         }
+
+        protected override void OnPropertyChanged(string propertyName)
+        {
+            base.OnPropertyChanged(propertyName);
+        }
+
+
+        private void OnSelectedIndexChanged(object sender, EventArgs eventArgs)
+        {
+            if (SelectedIndex < 0 || SelectedIndex >= ItemsSource.Cast<object>().Count())
+            {
+                SelectedItem = -1;
+            }
+            else
+            {
+                SelectedItem = ItemsSource.Cast<object>().ElementAt(SelectedIndex);
+            }
+        }
+
         /// <summary>
         /// Populate the specified bindable.
         /// </summary>
@@ -175,6 +265,38 @@ namespace ListViewTest01
 
             // Clean
             self.Refresh();
+        }
+
+        private static void UpdateSelected(BindableObject bindable, object oldvalue, object newvalue)
+        {
+            var self = bindable as RepeaterView;
+            if (self == null)
+            {
+                return;
+            }
+
+            var itemSource = self.SelfOrMasterItemsSource.Cast<object>();
+
+            if (itemSource == null || self.SelectedItem == null)
+            {
+                self.SelectedIndex = -1;
+            }
+            else
+            {
+
+                var item = self.SelectedItem;
+
+                /// 
+                if (itemSource.Contains(item))
+                {
+                    self.SelectedIndex = itemSource.IndexOf(item);
+                }
+                else
+                {
+                    self.SelectedIndex = -1;
+                }
+            }
+            System.Diagnostics.Debug.WriteLine($"SelectedIndex={self.SelectedIndex}");
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using XLabs.Forms.Controls;
+using ListViewTest01.UI;
 
 namespace ListViewTest01
 {

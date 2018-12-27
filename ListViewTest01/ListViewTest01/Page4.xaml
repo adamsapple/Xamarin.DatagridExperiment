@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dg="clr-namespace:Zumero;assembly=Zumero.DataGrid"
              xmlns:local="clr-namespace:ListViewTest01"
+             xmlns:ui="clr-namespace:ListViewTest01.UI"
              x:Class="ListViewTest01.Page4">
     <ContentPage.BindingContext>
         <local:ViewModel />

@@ -60,10 +60,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ExtendedScrollViewRenderer.cs" />
+    <Compile Include="UI\HideHBarScrollViewRenderer.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScrollViewExRenderer.cs" />
+    <Compile Include="UI\ScrollViewExRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
