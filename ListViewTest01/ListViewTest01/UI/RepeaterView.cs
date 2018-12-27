@@ -148,7 +148,7 @@ namespace ListViewTest01.UI
                     //tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandProperty, "TapCommand");
                     tapGestureRecognizer.Command = new Command(x =>
                     {
-                        RelaySelectedItem(viewModel, view, true);
+                        RaiseSelectedItem(viewModel, view);
                     });
                     tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandParameterProperty, UniqueId);
                     view.GestureRecognizers.Add(tapGestureRecognizer);
@@ -162,13 +162,8 @@ namespace ListViewTest01.UI
             }
         }
 
-        private void RelaySelectedItem(object newItem, View view = null, bool isStart = false)
+        private void RaiseSelectedItem(object newItem, View view)
         {
-            if(SelectedItem == newItem && !isStart)
-            {
-                return;
-            }
-
             if (SelectedContent != null)
             {
                 SelectedContent.BackgroundColor = Color.Transparent;
@@ -178,16 +173,60 @@ namespace ListViewTest01.UI
             {
                 SelectedItem    = null;
                 SelectedContent = null;
-
-                return;
+            }
+            else
+            {
+                SelectedItem = newItem;
             }
 
-            SelectedItem    = newItem;
-            SelectedContent = view;
-            SelectedContent?.BackgroundColor = Color.Red;
+            if (SelectedItem != null)
+            {
+                if (view != null)
+                {
+                    SelectedContent = view;
+                    SelectedContent.BackgroundColor = Color.Red;
+                }
+            }
 
-            Master?.RelaySelectedItem(newItem);
-            Slaves.ForEach(x => x.RelaySelectedItem(newItem));
+            Master?.RelaySelectedItemToMaster(SelectedItem);
+            Slaves?.ForEach(x => x.RelaySelectedItemToSlave(SelectedItem));
+        }
+
+        private void RaiseSelectedItemForce(object newItem)
+        {
+            if (SelectedContent != null)
+            {
+                SelectedContent.BackgroundColor = Color.Transparent;
+            }
+
+            SelectedContent = null;
+            SelectedItem    = newItem;
+
+
+            if (SelectedItem != null)
+            {
+
+                View view = Children.Where(x => x.BindingContext == newItem).FirstOrDefault();
+
+                if (view != null)
+                {
+                    SelectedContent = view;
+                    SelectedContent.BackgroundColor = Color.Red;
+                }
+            }
+        }
+
+
+        private void RelaySelectedItemToMaster(object newItem)
+        {
+            RaiseSelectedItemForce(newItem);
+            Master?.RelaySelectedItemToMaster(newItem);
+        }
+
+        private void RelaySelectedItemToSlave(object newItem)
+        {
+            RaiseSelectedItemForce(newItem);
+            Slaves?.ForEach(x => x.RelaySelectedItemToSlave(newItem));
         }
 
         public void Sort()
