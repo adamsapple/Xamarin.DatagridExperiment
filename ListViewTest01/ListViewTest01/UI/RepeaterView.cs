@@ -18,42 +18,31 @@ namespace ListViewTest01.UI
         /// <summary>
         /// The item template property.
         /// </summary>
-        public static readonly BindableProperty ItemTemplateProperty =
-                BindableProperty.Create(
-                    nameof(ItemTemplate),
-                    typeof(DataTemplate),
-                    typeof(RepeaterView),
-                    null,
-                    propertyChanged: (bindable, value, newValue) =>
-                        Populate(bindable));
+        public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(RepeaterView), null,
+                                                                                                propertyChanged: (bindable, value, newValue) => Populate(bindable));
 
         /// <summary>
         /// The items source property.
         /// </summary>
-        public static readonly BindableProperty ItemsSourceProperty =
-            BindableProperty.Create(
-                nameof(ItemsSource),
-                typeof(IEnumerable),
-                typeof(RepeaterView),
-                null,
-                //BindingMode.TwoWay,
-                propertyChanged: (bindable, value, newValue) =>
-                {
-                    var self = bindable as RepeaterView;
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(RepeaterView), null,
+                                                                                                //BindingMode.TwoWay,
+                                                                                                propertyChanged: (bindable, value, newValue) =>
+                                                                                                {
+                                                                                                    var self = bindable as RepeaterView;
 
-                    if (value is INotifyCollectionChanged oldNcc)
-                    {
-                        oldNcc.CollectionChanged -= self.OnCollectionChanged;
-                    }
+                                                                                                    if (value is INotifyCollectionChanged oldNcc)
+                                                                                                    {
+                                                                                                        oldNcc.CollectionChanged -= self.OnCollectionChanged;
+                                                                                                    }
 
-                    if (newValue is INotifyCollectionChanged newNcc)
-                    {
-                        newNcc.CollectionChanged += self.OnCollectionChanged;
-                    }
+                                                                                                    if (newValue is INotifyCollectionChanged newNcc)
+                                                                                                    {
+                                                                                                        newNcc.CollectionChanged += self.OnCollectionChanged;
+                                                                                                    }
 
-                    Populate(bindable);
-                }
-            );
+                                                                                                    Populate(bindable);
+                                                                                                }
+                                                                                            );
 
         /// <summary>
         /// Gets or sets the items source.
@@ -65,10 +54,7 @@ namespace ListViewTest01.UI
             set
             {
                 this.SetValue(ItemsSourceProperty, value);
-                foreach (var slave in Slaves)
-                {
-                    slave.ItemsSource = ItemsSource;
-                }
+                Slaves.ForEach(x => x.ItemsSource = ItemsSource);
             }
         }
 
@@ -162,24 +148,7 @@ namespace ListViewTest01.UI
                     //tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandProperty, "TapCommand");
                     tapGestureRecognizer.Command = new Command(x =>
                     {
-                        System.Diagnostics.Debug.WriteLine(x);
-
-                        if (SelectedContent != null)
-                        {
-                            SelectedContent.BackgroundColor = Color.Transparent;
-                        }
-
-                        if (SelectedItem == viewModel)
-                        {
-                            SelectedItem    = null;
-                            SelectedContent = null;
-
-                            return;
-                        }
-
-                        SelectedItem    = viewModel;
-                        SelectedContent = view;
-                        SelectedContent.BackgroundColor = Color.Red;
+                        RelaySelectedItem(viewModel, view, true);
                     });
                     tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandParameterProperty, UniqueId);
                     view.GestureRecognizers.Add(tapGestureRecognizer);
@@ -191,6 +160,34 @@ namespace ListViewTest01.UI
             {
                 slave.Refresh();
             }
+        }
+
+        private void RelaySelectedItem(object newItem, View view = null, bool isStart = false)
+        {
+            if(SelectedItem == newItem && !isStart)
+            {
+                return;
+            }
+
+            if (SelectedContent != null)
+            {
+                SelectedContent.BackgroundColor = Color.Transparent;
+            }
+
+            if (SelectedItem == newItem)
+            {
+                SelectedItem    = null;
+                SelectedContent = null;
+
+                return;
+            }
+
+            SelectedItem    = newItem;
+            SelectedContent = view;
+            SelectedContent?.BackgroundColor = Color.Red;
+
+            Master?.RelaySelectedItem(newItem);
+            Slaves.ForEach(x => x.RelaySelectedItem(newItem));
         }
 
         public void Sort()

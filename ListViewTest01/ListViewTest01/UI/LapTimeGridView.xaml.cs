@@ -47,8 +47,8 @@ namespace ListViewTest01.UI
             headers.Add(col4);
             headers.Add(col5);
 
-            HeaderElement     = Header;
-            BodyElement       = Body;
+            HeaderElement     = HeaderGrid;
+            BodyElement       = BodyGrid;
 
             TapCommand = new Command(x =>
             {
