@@ -178,31 +178,45 @@ namespace ListViewTest01.UI
         /// <param name="view"></param>
         private void UpdateSelectedItem(object newItem, View view)
         {
-            if (SelectedContent != null)
-            {
-                SelectedContent.BackgroundColor = Color.Transparent;
-            }
-
             if (SelectedItem == newItem)
             {
                 SelectedItem    = null;
-                SelectedContent = null;
             }
             else
             {
                 SelectedItem    = newItem;
             }
 
-            if (SelectedItem != null)
-            {
-                view = Children.Where(x => x.BindingContext == newItem).FirstOrDefault();
-
-                SelectedContent = (view as Layout<View> as StackLayout).Children[0];
-                SelectedContent.BackgroundColor = Color.Red;
-            }
+            UpdateSelectedItemVisual(view);
 
             RelaySelectedItemToMaster(SelectedItem);
             RelaySelectedItemToSlave(SelectedItem);
+        }
+
+        private void UpdateSelectedItemVisual(View view = null)
+        {
+            if (SelectedContent != null)
+            {
+                SelectedContent.BackgroundColor = Color.Transparent;
+            }
+
+            var seelctedItem = SelectedItem;
+            if (seelctedItem == null)
+            {
+                SelectedContent = null;
+                return;
+            }
+
+            if (view == null)
+            {
+                view = Children.Where(x => x.BindingContext == seelctedItem).FirstOrDefault();
+            }
+                
+            if (view != null)
+            {
+                SelectedContent = (view as Layout<View> as StackLayout).Children[0];
+                SelectedContent.BackgroundColor = Color.Red;
+            }
         }
 
         /// <summary>
@@ -212,31 +226,12 @@ namespace ListViewTest01.UI
         /// <param name="view"></param>
         private void UpdateSelectedItemForce(object newItem, View view = null)
         {
-            if (SelectedItem == newItem)
+            if (SelectedItem != newItem)
             {
-                return;
+                SelectedItem = newItem;
             }
 
-            if (SelectedContent != null)
-            {
-                SelectedContent.BackgroundColor = Color.Transparent;
-            }
-
-            SelectedItem = newItem;
-
-            if (SelectedItem != null)
-            {
-                if (view == null)
-                {
-                    view = Children.Where(x => x.BindingContext == newItem).FirstOrDefault();
-                }
-                
-                if(view != null)
-                {
-                    SelectedContent = (view as Layout<View> as StackLayout).Children[0];
-                    SelectedContent.BackgroundColor = Color.Red;
-                }
-            }
+            UpdateSelectedItemVisual(view);
         }
 
         /// <summary>
@@ -301,6 +296,10 @@ namespace ListViewTest01.UI
                     child.Value.BindingContext = items[child.Index];
                 }
             }
+
+            UpdateSelectedItemVisual();
+            RelaySelectedItemToMaster(SelectedItem);
+            RelaySelectedItemToSlave(SelectedItem);
         }
 
         private void OnSelectedIndexChanged(object sender, EventArgs eventArgs)
