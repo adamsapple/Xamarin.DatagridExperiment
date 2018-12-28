@@ -12,6 +12,15 @@ namespace ListViewTest01.UI
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class LapTimeGridView : ContentView
 	{
+        #region Bindable Properties.
+        public static readonly BindableProperty EvenRowBackGroundColorProperty = BindableProperty.Create(nameof(EvenRowBackGroundColor), typeof(Color), typeof(LapTimeGridView), null, propertyChanged: ChangeBackGroundColor);
+        public Color EvenRowBackGroundColor
+        {
+            get => (Color)this.GetValue(EvenRowBackGroundColorProperty);
+            set => this.SetValue(EvenRowBackGroundColorProperty, value);
+        }
+        #endregion Bindable Properties.
+
         #region Properties.
         /// <summary>
         /// Headerを格納してるElement
@@ -161,5 +170,16 @@ namespace ListViewTest01.UI
             System.Diagnostics.Debug.WriteLine(parameter);
         }
 
+
+        public static void ChangeBackGroundColor(BindableObject bindable, object oldvalue, object newvalue)
+        {
+            var self = bindable as LapTimeGridView;
+            if (self == null)
+            {
+                return;
+            }
+
+
+        }
     }
 }
