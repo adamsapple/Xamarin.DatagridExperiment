@@ -15,6 +15,7 @@ namespace ListViewTest01.UI
     /// </summary>
     public class RepeaterView : StackLayout
     {
+        #region Bindable Properties.
         /// <summary>
         /// The item template property.
         /// </summary>
@@ -69,7 +70,7 @@ namespace ListViewTest01.UI
         }
 
         /// <summary>
-        /// 
+        /// Bindable Property for SelectedItem.
         /// </summary>
         public static BindableProperty SelectedItemProperty =
             BindableProperty.Create(
@@ -80,7 +81,7 @@ namespace ListViewTest01.UI
                 propertyChanged:  UpdateSelected);
 
         /// <summary>
-        /// 
+        /// SelectedItem Property.
         /// </summary>
         public object SelectedItem
         {
@@ -108,6 +109,7 @@ namespace ListViewTest01.UI
             get { return (int)GetValue(SelectedIndexProperty); }
             set { SetValue(SelectedIndexProperty, value); }
         }
+        #endregion Bindable Properties.
 
         /// <summary>
         /// 
@@ -116,6 +118,9 @@ namespace ListViewTest01.UI
 
         public IEnumerable SelfOrMasterItemsSource => ItemsSource ?? Master?.ItemsSource;
 
+        /// <summary>
+        /// 行数の更新等、再表示に使う
+        /// </summary>
         public void Refresh()
         {
             var itemsSource = SelfOrMasterItemsSource?.Cast<object>().ToArray();
@@ -132,27 +137,31 @@ namespace ListViewTest01.UI
             foreach (var viewModel in itemsSource)
             {
                 var content = this.ItemTemplate.CreateContent();
-                if (!(content is View) && !(content is ViewCell))
+                var view    = content is View ? content as View : (content as ViewCell).View;
+
+                if (view == null)
                 {
-                    throw new Exception(
-                          $"Invalid visual object {nameof(content)}");
+                    throw new Exception($"Invalid visual object {nameof(content)}");
                 }
 
-                var view = content is View ? content as View :
-                                             ((ViewCell)content).View;
-                view.Margin = new Thickness(0);
-                view.BindingContext = viewModel;
+                view.Margin          = new Thickness(0);
+                view.BackgroundColor = (Children.Count() % 2 == 0) ? Color.Transparent : Color.FromRgba(0, 0, 0, 0.04);
+                view.BindingContext  = viewModel;
+
                 if (!view.GestureRecognizers.Any())
                 {
+                    ////
+                    /// Tapイベントの登録 (選択物の更新)
+                    //
                     var tapGestureRecognizer = new TapGestureRecognizer();
                     //tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandProperty, "TapCommand");
-                    tapGestureRecognizer.Command = new Command(x =>
-                    {
-                        RelaySelectedItem(viewModel, view, true);
-                    });
+                    // Tap時イベント。選択物の変更/解除
+                    tapGestureRecognizer.Command = new Command(x => UpdateSelectedItem(view.BindingContext, view));
+                    // BindingされたItemのユニークなKey名を登録
                     tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandParameterProperty, UniqueId);
                     view.GestureRecognizers.Add(tapGestureRecognizer);
                 }
+
                 this.Children.Add(view);
             }
 
@@ -162,13 +171,13 @@ namespace ListViewTest01.UI
             }
         }
 
-        private void RelaySelectedItem(object newItem, View view = null, bool isStart = false)
+        /// <summary>
+        /// 選択物の更新
+        /// </summary>
+        /// <param name="newItem"></param>
+        /// <param name="view"></param>
+        private void UpdateSelectedItem(object newItem, View view)
         {
-            if(SelectedItem == newItem && !isStart)
-            {
-                return;
-            }
-
             if (SelectedContent != null)
             {
                 SelectedContent.BackgroundColor = Color.Transparent;
@@ -178,18 +187,84 @@ namespace ListViewTest01.UI
             {
                 SelectedItem    = null;
                 SelectedContent = null;
+            }
+            else
+            {
+                SelectedItem    = newItem;
+            }
 
+            if (SelectedItem != null)
+            {
+                view = Children.Where(x => x.BindingContext == newItem).FirstOrDefault();
+
+                SelectedContent = (view as Layout<View> as StackLayout).Children[0];
+                SelectedContent.BackgroundColor = Color.Red;
+            }
+
+            RelaySelectedItemToMaster(SelectedItem);
+            RelaySelectedItemToSlave(SelectedItem);
+        }
+
+        /// <summary>
+        /// 選択変更の伝搬用メソッド
+        /// </summary>
+        /// <param name="newItem"></param>
+        /// <param name="view"></param>
+        private void UpdateSelectedItemForce(object newItem, View view = null)
+        {
+            if (SelectedItem == newItem)
+            {
                 return;
             }
 
-            SelectedItem    = newItem;
-            SelectedContent = view;
-            SelectedContent?.BackgroundColor = Color.Red;
+            if (SelectedContent != null)
+            {
+                SelectedContent.BackgroundColor = Color.Transparent;
+            }
 
-            Master?.RelaySelectedItem(newItem);
-            Slaves.ForEach(x => x.RelaySelectedItem(newItem));
+            SelectedItem = newItem;
+
+            if (SelectedItem != null)
+            {
+                if (view == null)
+                {
+                    view = Children.Where(x => x.BindingContext == newItem).FirstOrDefault();
+                }
+                
+                if(view != null)
+                {
+                    SelectedContent = (view as Layout<View> as StackLayout).Children[0];
+                    SelectedContent.BackgroundColor = Color.Red;
+                }
+            }
         }
 
+        /// <summary>
+        /// Master側への選択物更新通知
+        /// </summary>
+        /// <param name="newItem"></param>
+        private void RelaySelectedItemToMaster(object newItem)
+        {
+            Master?.UpdateSelectedItemForce(newItem);
+            Master?.RelaySelectedItemToMaster(newItem);
+        }
+
+        /// <summary>
+        /// Slave側への選択物更新通知
+        /// </summary>
+        /// <param name="newItem"></param>
+        private void RelaySelectedItemToSlave(object newItem)
+        {
+            Slaves?.ForEach(x =>
+            {
+                x.UpdateSelectedItemForce(newItem);
+                x.RelaySelectedItemToSlave(newItem);
+            });
+        }
+
+        /// <summary>
+        /// Sorting.
+        /// </summary>
         public void Sort()
         {
             // Only populate once both properties are received
@@ -228,17 +303,11 @@ namespace ListViewTest01.UI
             }
         }
 
-        protected override void OnPropertyChanged(string propertyName)
-        {
-            base.OnPropertyChanged(propertyName);
-        }
-
-
         private void OnSelectedIndexChanged(object sender, EventArgs eventArgs)
         {
             if (SelectedIndex < 0 || SelectedIndex >= ItemsSource.Cast<object>().Count())
             {
-                SelectedItem = -1;
+                SelectedItem = null;
             }
             else
             {
@@ -264,36 +333,37 @@ namespace ListViewTest01.UI
             self.Refresh();
         }
 
+        /// <summary>
+        /// Binding:SelectedIndexの更新
+        /// </summary>
+        /// <param name="bindable"></param>
+        /// <param name="oldvalue"></param>
+        /// <param name="newvalue"></param>
         private static void UpdateSelected(BindableObject bindable, object oldvalue, object newvalue)
         {
             var self = bindable as RepeaterView;
-            if (self == null)
-            {
-                return;
-            }
+            self?.UpdateSelectedIndexBySelectedItem();
+        }
 
-            var itemSource = self.SelfOrMasterItemsSource.Cast<object>();
+        /// <summary>
+        /// SelectedIndexの更新
+        /// </summary>
+        private int UpdateSelectedIndexBySelectedItem()
+        {
+            var itemSource = SelfOrMasterItemsSource.Cast<object>();
 
-            if (itemSource == null || self.SelectedItem == null)
+            if (itemSource == null || SelectedItem == null)
             {
-                self.SelectedIndex = -1;
+                SelectedIndex = -1;
             }
             else
             {
-
-                var item = self.SelectedItem;
-
-                /// 
-                if (itemSource.Contains(item))
-                {
-                    self.SelectedIndex = itemSource.IndexOf(item);
-                }
-                else
-                {
-                    self.SelectedIndex = -1;
-                }
+                SelectedIndex = itemSource.IndexOf(SelectedItem);
             }
-            System.Diagnostics.Debug.WriteLine($"SelectedIndex={self.SelectedIndex}");
+
+            System.Diagnostics.Debug.WriteLine($"SelectedIndex={SelectedIndex}");
+
+            return SelectedIndex;
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -323,24 +393,28 @@ namespace ListViewTest01.UI
         }
         */
 
-        private RepeaterView Master = null;
+        private bool IsSlave => (Master != null);
+
+        private RepeaterView       Master = null;
         private List<RepeaterView> Slaves = new List<RepeaterView>();
 
+        /// <summary>
+        /// 状態を同期するSlaveを設定する
+        /// </summary>
+        /// <param name="slave"></param>
         public void AddSlave(RepeaterView slave) {
-            slave.IsSlave = true;
+            slave.Master         = this;
             slave.BindingContext = this.BindingContext;
-            slave.Master = this;
+            
             Slaves.Add(slave);
             slave.Refresh();
         }
-
-        private bool IsSlave = false;
     }
 
     [TypeConverter(typeof(SortDataTypeConverter))]
     public class SortData
     {
-        #region ctor
+        #region ctor.
         public SortData()
         {
             Order = SortingOrder.None;
@@ -348,19 +422,19 @@ namespace ListViewTest01.UI
 
         public SortData(string name, SortingOrder order)
         {
-            Name = name;
+            Name  = name;
             Order = order;
         }
 
-        #endregion
+        #endregion ctor.
 
-        #region Properties
+        #region Properties.
         public SortingOrder Order { get; set; }
 
         public string Name { get; set; }
 
         public Type Type { get; set; }
-        #endregion
+        #endregion Properties.
 
         private IComparer<object> baseComparer;
 
@@ -390,16 +464,21 @@ namespace ListViewTest01.UI
 
     }
 
+    /// <summary>
+    ///  Sort type.
+    /// </summary>
     public enum SortingOrder
     {
-        None = 0,
-        Ascendant = 1,
+        None       = 0,
+        Ascendant  = 1,
         Descendant = 2,
     }
 
+    /// <summary>
+    /// TypeConverter for SortData.
+    /// </summary>
     public class SortDataTypeConverter : TypeConverter
     {
-
         public override bool CanConvertFrom(Type sourceType)
         {
             return base.CanConvertFrom(sourceType);
@@ -411,6 +490,10 @@ namespace ListViewTest01.UI
         }
     }
 
+    /// <summary>
+    /// Comparer for Sorting.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     sealed class DynamicComparer<T> : IComparer<T>
     {
         private Func<T, T, int> compare;
