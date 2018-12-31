@@ -82,7 +82,10 @@
                 <!--
                 固定カラム
                 -->
-                <ContentView x:Name="fixedHeaderEntryPoint"/>
+                <!--<ContentView x:Name="fixedHeaderEntryPoint"/>-->
+                <StackLayout x:Name="fixedHeaderEntryPoint"
+                             HeightRequest="{Binding HeaderHeight, Source={x:Reference self}}" Orientation="Horizontal"
+                             Spacing="0" Padding="0" Margin="0" />
                 <!--<ui:ClickableLabel x:Name="col0"
                                    Grid.Column="0" Grid.Row="0"
                                    ColmnName="Id" Clicked="HeaderColumn_Clicked" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>-->

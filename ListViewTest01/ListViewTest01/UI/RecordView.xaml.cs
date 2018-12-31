@@ -40,9 +40,14 @@ namespace ListViewTest01.UI
             BindableProperty.Create(nameof(HeaderHeight), typeof(double), typeof(RecordView), 50d,
                 propertyChanged: (b, o, n) => (b as RecordView).Columns.ToList().ForEach(x => x.TitleLabel.HeightRequest = (double)n));
 
-
         public static readonly BindableProperty RowHeightProperty =
             BindableProperty.Create(nameof(RowHeight), typeof(double), typeof(RecordView), 40d);
+
+        public static readonly BindableProperty FixedColumnTotalWidthProperty =
+            BindableProperty.Create(nameof(FixedColumnTotalWidth), typeof(double), typeof(RecordView), 0d);
+
+        public static readonly BindableProperty FloatColumnTotalWidthProperty =
+            BindableProperty.Create(nameof(FloatColumnTotalWidth), typeof(double), typeof(RecordView), 0d);
 
         public static readonly BindableProperty SelectionEnabledProperty =
             BindableProperty.Create(nameof(SelectionEnabled), typeof(bool), typeof(RecordView), true,
@@ -116,6 +121,17 @@ namespace ListViewTest01.UI
             set { SetValue(HeaderHeightProperty, value); }
         }
 
+        public double FixedColumnTotalWidth
+        {
+            get { return (double)GetValue(FixedColumnTotalWidthProperty); }
+            set { SetValue(FixedColumnTotalWidthProperty, value); }
+        }
+
+        public double FloatColumnTotalWidth
+        {
+            get { return (double)GetValue(FloatColumnTotalWidthProperty); }
+            set { SetValue(FloatColumnTotalWidthProperty, value); }
+        }
 
         public View NoDataView
         {
@@ -213,13 +229,9 @@ namespace ListViewTest01.UI
                 return;
             }
 
-            columns.Take(1)
-                   .ToList()
-                   .ForEach(x => 
-                   {
-                       HeaderGrid.ColumnDefinitions[0].Width = x.Width;
-                       BodyGrid.ColumnDefinitions[0].Width   = x.Width;
-                   });
+            var fixedWidth = columns.Where(x => x.IsFixedColumn).Sum(x => x.Width);
+            HeaderGrid.ColumnDefinitions[0].Width = fixedWidth;
+            BodyGrid.ColumnDefinitions[0].Width   = fixedWidth;
 
             var height = HeaderHeight;
             columns.Select(x => x.TitleLabel)
@@ -228,22 +240,36 @@ namespace ListViewTest01.UI
                    .ForEach(x => x.HeightRequest = height);
 
             headers.Clear();
+            fixedHeaderEntryPoint.Children.Clear();
             floatedHeaderEntryPoint.Children.Clear();
 
-            columns.Take(1)
-                   .ToList()
+            //columns.Take(1)
+            //       .ToList()
+            //       .ForEach(x => {
+            //           headers.Add(x.TitleLabel);
+                       
+            //       });
+
+            //columns.Skip(1)
+            //       .ToList()
+            //       .ForEach(x => {
+            //           headers.Add(x.TitleLabel);
+            //           floatedHeaderEntryPoint.Children.Add(x.TitleLabel);
+            //       });
+
+            columns.ToList()
                    .ForEach(x => {
                        headers.Add(x.TitleLabel);
-                       fixedHeaderEntryPoint.Content = x.TitleLabel;
+                       if (x.IsFixedColumn)
+                       {
+                           fixedHeaderEntryPoint.Children.Add(x.TitleLabel);
+                       }
+                       else
+                       {
+                           floatedHeaderEntryPoint.Children.Add(x.TitleLabel);
+                       }
                    });
 
-            columns.Skip(1)
-                   .ToList()
-                   .ForEach(x => {
-                       headers.Add(x.TitleLabel);
-                       floatedHeaderEntryPoint.Children.Add(x.TitleLabel);
-                   });
-            
             //
             // ソートラベルの描画状態を更新
             //
