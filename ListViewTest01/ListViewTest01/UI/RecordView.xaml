@@ -82,6 +82,7 @@
                     <ui:RepeaterView x:Name="masterListView"
                                      ItemsSource="{Binding ItemsSource, Source={x:Reference self}}"
                                      SelectedItem="{Binding SelectedItem, Mode=TwoWay, Source={x:Reference self}}"
+                                     SelectionEnabled="{Binding SelectionEnabled, Source={x:Reference self}}"
                                      Grid.Column="0" Grid.Row="0"
                                      BackgroundColor="{Binding FixedColumnBackgroundColor, Source={x:Reference self}}"
                                      Spacing="0" Padding="0" Margin="0">
@@ -99,7 +100,9 @@
                                      Grid.Column="1" Grid.Row="0"
                                      Orientation="Horizontal"
                                      HorizontalOptions="FillAndExpand">
-                        <ui:RepeaterView x:Name="slaveListView" UniqueId="{Binding UniquePropertyName, Source={x:Reference self}}"
+                        <ui:RepeaterView x:Name="slaveListView"
+                                         UniqueId="{Binding UniquePropertyName, Source={x:Reference self}}"
+                                         SelectionEnabled="{Binding SelectionEnabled, Source={x:Reference self}}"
                                          Spacing="0" Padding="0" Margin="0">
                             <ui:RepeaterView.ItemTemplate>
                                 <DataTemplate>

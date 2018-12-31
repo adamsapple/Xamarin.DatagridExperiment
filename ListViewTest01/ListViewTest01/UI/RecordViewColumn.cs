@@ -39,8 +39,8 @@ namespace ListViewTest01.UI
         //public static readonly BindableProperty StringFormatProperty =
         //    BindableProperty.Create(nameof(StringFormat), typeof(string), typeof(RecordViewColumn), null);
 
-        //public static readonly BindableProperty CellTemplateProperty =
-        //    BindableProperty.Create(nameof(CellTemplate), typeof(DataTemplate), typeof(RecordViewColumn), null);
+        public static readonly BindableProperty ColumnTemplateProperty =
+            BindableProperty.Create(nameof(ColumnTemplate), typeof(DataTemplate), typeof(RecordViewColumn), null);
 
         public static readonly BindableProperty HorizontalTextAlignmentProperty =
             BindableProperty.Create(nameof(HorizontalTextAlignment), typeof(TextAlignment), typeof(RecordViewColumn), TextAlignment.Center,
@@ -113,11 +113,11 @@ namespace ListViewTest01.UI
         //    set { SetValue(StringFormatProperty, value); }
         //}
 
-        //public DataTemplate CellTemplate
-        //{
-        //    get { return (DataTemplate)GetValue(CellTemplateProperty); }
-        //    set { SetValue(CellTemplateProperty, value); }
-        //}
+        public DataTemplate ColumnTemplate
+        {
+            get { return (DataTemplate)GetValue(ColumnTemplateProperty); }
+            set { SetValue(ColumnTemplateProperty, value); }
+        }
 
         internal ClickableLabel TitleLabel { get; set; }
 

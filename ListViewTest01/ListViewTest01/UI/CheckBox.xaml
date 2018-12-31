@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ListViewTest01.UI.CheckBox">
+  <ContentView.Content>
+      <StackLayout Orientation="Horizontal">
+            <Frame x:Name="ChkFrame"  HorizontalOptions="Start" VerticalOptions="Center" Padding="0" OutlineColor="LightBlue" Margin="1,1,1,1">
+                <Label x:Name="ChkLabel"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="Center" LineBreakMode="NoWrap" />
+            </Frame>
+            <Label x:Name="TxtLabel"
+                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center" LineBreakMode="NoWrap" />
+        </StackLayout>
+  </ContentView.Content>
+</ContentView>

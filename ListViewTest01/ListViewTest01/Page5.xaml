@@ -21,15 +21,30 @@
             <!--<local:LapGrid />-->
             <ui:RecordView x:Name="recordView"
                            ItemsSource="{Binding Items}"
+                           SelectionEnabled="False"
                            RowHeight="30" HeaderHeight="40" UniquePropertyName="Id">
-              <ui:RecordView.Columns>
-                  <ui:RecordViewColumn Title="Id"     PropertyName="Id"     IsFixedColumn="True"  Width="50"/>
-                  <ui:RecordViewColumn Title="Data01" PropertyName="Data01" IsFixedColumn="True" Width="100"/>
-                  <ui:RecordViewColumn Title="Data02" PropertyName="Data02" Width="100"/>
-                  <ui:RecordViewColumn Title="Data03" PropertyName="Data03" Width="100"/>
-                  <ui:RecordViewColumn Title="Data04" PropertyName="Data04" Width="100"/>
-                  <ui:RecordViewColumn Title="Data05" PropertyName="Data05" Width="100"/>
-              </ui:RecordView.Columns>
+                <ui:RecordView.Columns>
+                    <ui:RecordViewColumn Title="Id"     PropertyName="Id" IsFixedColumn="True"  Width="60">
+                        <ui:RecordViewColumn.ColumnTemplate>
+                            <DataTemplate>
+                                <StackLayout Orientation="Horizontal" Spacing="0" Margin="0" Padding="0">
+                                    <!--<Label Text="*" 
+                                           HorizontalTextAlignment="Start" VerticalTextAlignment="Center" 
+                                           HorizontalOptions="Start" LineBreakMode="NoWrap" />-->
+                                    <ui:CheckBox />
+                                    <Label Text="{Binding Id}"
+                                        HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                        HorizontalOptions="FillAndExpand" LineBreakMode="NoWrap" />
+                                </StackLayout>
+                            </DataTemplate>
+                        </ui:RecordViewColumn.ColumnTemplate>    
+                    </ui:RecordViewColumn>
+                    <ui:RecordViewColumn Title="Data01" PropertyName="Data01" IsFixedColumn="True" Width="100"/>
+                    <ui:RecordViewColumn Title="Data02" PropertyName="Data02" Width="100"/>
+                    <ui:RecordViewColumn Title="Data03" PropertyName="Data03" Width="100"/>
+                    <ui:RecordViewColumn Title="Data04" PropertyName="Data04" Width="100"/>
+                    <ui:RecordViewColumn Title="Data05" PropertyName="Data05" Width="100"/>
+                </ui:RecordView.Columns>
             </ui:RecordView>
         </StackLayout>
     </ContentPage.Content>

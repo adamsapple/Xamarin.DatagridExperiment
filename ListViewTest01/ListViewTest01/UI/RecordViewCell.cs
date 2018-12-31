@@ -53,20 +53,38 @@ namespace ListViewTest01.UI
                 //VerticalOptions = LayoutOptions.FillAndExpand,
             };
             
-            Columns?.Where(x => x.IsFixedColumn == IsFixedColumn).ToList().ForEach(x =>
+            Columns?.Where(x => x.IsFixedColumn == IsFixedColumn).ToList()
+            .ForEach(column =>
             {
-                var label = new Label
-                {
-                    LineBreakMode           = LineBreakMode.NoWrap,
-                    HorizontalTextAlignment = TextAlignment.Center,
-                    VerticalTextAlignment   = TextAlignment.Center,
-                    //HorizontalOptions       = LayoutOptions.FillAndExpand,
-                };
-                label.SetBinding(Label.TextProperty, x.PropertyName);
-                label.SetBinding(Label.WidthRequestProperty, new Binding("Width", source: x));
-                label.SetBinding(Label.HeightRequestProperty, new Binding("Height", source: this));
+                View cell = null;
 
-                view.Children.Add(label);
+                if (column.ColumnTemplate != null)
+                {
+                    cell = new ContentView
+                    {
+                        Content = column.ColumnTemplate.CreateContent() as View
+                    };
+                    if (column.PropertyName != null)
+                    {
+                        //cell.SetBinding(BindingContextProperty,
+                        //    new Binding(column.PropertyName, source: column));
+                    }
+                }
+                else
+                {
+                    cell = new Label
+                    {
+                        LineBreakMode           = LineBreakMode.NoWrap,
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        VerticalTextAlignment   = TextAlignment.Center,
+                        //HorizontalOptions     = LayoutOptions.FillAndExpand,
+                    };
+                    cell.SetBinding(Label.TextProperty, column.PropertyName);
+                }
+
+                cell.SetBinding(VisualElement.WidthRequestProperty, new Binding("Width", source: column));
+                cell.SetBinding(VisualElement.HeightRequestProperty, new Binding("Height", source: this));
+                view.Children.Add(cell);
             });
 
             View = new ContentView

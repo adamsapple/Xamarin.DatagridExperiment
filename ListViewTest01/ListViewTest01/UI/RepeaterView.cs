@@ -67,13 +67,38 @@ namespace ListViewTest01.UI
         /// Bindable Property for SelectedItem.
         /// </summary>
         public static BindableProperty SelectedItemProperty =
-            BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(RepeaterView), propertyChanged: SelectedItemChanged);
+            BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(RepeaterView),
+                propertyChanged: SelectedItemChanged);
+                //validateValue: (b, v) => (b as RepeaterView).SelectionEnabled);
 
         /// <summary>
         /// SelectedIndexProperty
         /// </summary>
         public static BindableProperty SelectedIndexProperty =
             BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(RepeaterView), defaultValue: -1);
+
+        /// <summary>
+        /// Bindable property for SelectionEnabled.
+        /// </summary>
+        public static readonly BindableProperty SelectionEnabledProperty =
+            BindableProperty.Create(nameof(SelectionEnabled), typeof(bool), typeof(RepeaterView), true,
+                propertyChanged: (b,o,n) => 
+                    {
+                        if (o == n)
+                        {
+                            return;
+                        }
+                        var self = b as RepeaterView;
+                        if ((bool)n == false)
+                        {
+                            self.SelectedItem = null;
+                        }
+                        else
+                        {
+                            self.UpdateSelectedItem(self.SelectedItem);
+                        }
+                    });
+
         #endregion Bindable Properties.
 
         #region Properties.
@@ -130,6 +155,15 @@ namespace ListViewTest01.UI
         /// <summary>
         /// 
         /// </summary>
+        public bool SelectionEnabled
+        {
+            get { return (bool)GetValue(SelectionEnabledProperty); }
+            set { SetValue(SelectionEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Color EvenRowBackgroundColor
         {
             get => (Color)this.GetValue(EvenRowBackgroundColorProperty);
@@ -147,6 +181,7 @@ namespace ListViewTest01.UI
 
 
         private View SelectedContent { get; set; }
+        private bool IsSelectVisible { get; set; } = true;
         
         public IEnumerable SelfOrMasterItemsSource => ItemsSource ?? Master?.ItemsSource;
 
@@ -283,6 +318,11 @@ namespace ListViewTest01.UI
 
         private void UpdateSelectedItemVisual(View view = null)
         {
+            if (!SelectionEnabled)
+            {
+                return;
+            }
+            
             if (SelectedContent != null)
             {
                 SelectedContent.BackgroundColor = Color.Transparent;
