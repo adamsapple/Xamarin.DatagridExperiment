@@ -43,19 +43,15 @@ namespace ListViewTest01.UI
         /// The item template property.
         /// </summary>
         public static readonly BindableProperty SortingOrderProperty =
-                BindableProperty.Create(
-                    nameof(SortingOrderProperty),
-                    typeof(SortingOrder),
-                    typeof(ClickableLabel),
-                    SortingOrder.None,
-                    propertyChanged: (bindable, value, newValue) =>
+            BindableProperty.Create(nameof(SortingOrderProperty), typeof(SortingOrder), typeof(ClickableLabel), SortingOrder.None,
+                propertyChanged: (bindable, value, newValue) =>
+                {
+                    if (bindable is ClickableLabel self)
                     {
-                        if (bindable is ClickableLabel self)
-                        {
-                            self.Text = self.ColmnName + SortingOrderToString((SortingOrder)newValue);
-                        }
+                        self.Text = self.ColmnName + SortingOrderToString((SortingOrder)newValue);
                     }
-                );
+                }
+            );
         
         /// <summary>
         /// Gets or sets the item template.
@@ -76,6 +72,8 @@ namespace ListViewTest01.UI
 
         public ClickableLabel() : base()
         {
+            LineBreakMode = LineBreakMode.NoWrap;
+
             this.GestureRecognizers.Add(tapGestureRecognizer);
 
             tapGestureRecognizer.Tapped += (sender, e) => Clicked?.Invoke(sender, e);

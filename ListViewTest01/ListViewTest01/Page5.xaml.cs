@@ -15,6 +15,14 @@ namespace ListViewTest01
 		public Page5 ()
 		{
 			InitializeComponent ();
-		}
+
+            recordView.ItemSelected += (s, e) =>
+            {
+                System.Diagnostics.Debug.WriteLine(e.SelectedItem?.ToString());
+            };
+
+
+            recordView.SelectedItem = recordView.ItemsSource.Cast<ListViewItem>().Where(x => x.Id == 13).FirstOrDefault();
+        }
 	}
 }

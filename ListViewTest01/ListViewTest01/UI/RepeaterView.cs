@@ -61,7 +61,7 @@ namespace ListViewTest01.UI
         /// Bindable Propertiy for EvenRowBackGroundColor.
         /// </summary>
         public static readonly BindableProperty EvenRowBackgroundColorProperty =
-            BindableProperty.Create(nameof(EvenRowBackgroundColor), typeof(Color), typeof(RecordView), defaultValue: Color.FromRgba(0, 0, 0, 0.04), propertyChanged: BackgroundColorChanged);
+            BindableProperty.Create(nameof(EvenRowBackgroundColor), typeof(Color), typeof(RecordView), defaultValue: Color.FromRgba(0, 0, 0, 0.05), propertyChanged: BackgroundColorChanged);
 
         /// <summary>
         /// Bindable Property for SelectedItem.
@@ -179,7 +179,6 @@ namespace ListViewTest01.UI
                     throw new Exception($"Invalid visual object {nameof(content)}");
                 }
 
-                //view.Margin          = new Thickness(0);
                 view.BackgroundColor = (Children.Count() % 2 == 0) ? Color.Transparent : EvenRowBackgroundColor;
                 view.BindingContext  = viewModel;
 
@@ -191,7 +190,7 @@ namespace ListViewTest01.UI
                     var tapGestureRecognizer = new TapGestureRecognizer();
                     //tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandProperty, "TapCommand");
                     // Tap時イベント。選択物の変更/解除
-                    tapGestureRecognizer.Command = new Command(x => UpdateSelectedItem(view.BindingContext, view));
+                    tapGestureRecognizer.Command = new Command(x => UpdateSelectedItemByTap(view.BindingContext, view));
                     // BindingされたItemのユニークなKey名を登録
                     tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandParameterProperty, UniqueId);
                     view.GestureRecognizers.Add(tapGestureRecognizer);
@@ -223,7 +222,16 @@ namespace ListViewTest01.UI
         /// <param name="newvalue"></param>
         private static void SelectedItemChanged(BindableObject bindable, object oldvalue, object newvalue)
         {
-            (bindable as RepeaterView)?.UpdateSelectedIndexBySelectedItem();
+            if(oldvalue == newvalue)
+            {
+                return;
+            }
+
+            if (bindable is RepeaterView self)
+            {
+                self.UpdateSelectedItem(newvalue);
+                self.UpdateSelectedIndexBySelectedItem();
+            }
         }
 
         /// <summary>
@@ -239,11 +247,29 @@ namespace ListViewTest01.UI
         #endregion Static method for Bindable Properties.
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="newItem"></param>
+        /// <param name="view"></param>
+        private void UpdateSelectedItem(object newItem, View view = null)
+        {
+            if(view == null)
+            {
+                view = Children.Where(x => x.BindingContext == newItem).FirstOrDefault();
+            }
+
+            UpdateSelectedItemVisual(view);
+
+            RelaySelectedItemToMaster(SelectedItem);
+            RelaySelectedItemToSlave(SelectedItem);
+        }
+
+        /// <summary>
         /// 選択物の更新
         /// </summary>
         /// <param name="newItem"></param>
         /// <param name="view"></param>
-        private void UpdateSelectedItem(object newItem, View view)
+        private void UpdateSelectedItemByTap(object newItem, View view)
         {
             if (SelectedItem == newItem)
             {
@@ -253,11 +279,6 @@ namespace ListViewTest01.UI
             {
                 SelectedItem    = newItem;
             }
-
-            UpdateSelectedItemVisual(view);
-
-            RelaySelectedItemToMaster(SelectedItem);
-            RelaySelectedItemToSlave(SelectedItem);
         }
 
         private void UpdateSelectedItemVisual(View view = null)
@@ -519,7 +540,6 @@ namespace ListViewTest01.UI
                     return Order == SortingOrder.Descendant ? -result : result;
                 });
         }
-
     }
 
     /// <summary>

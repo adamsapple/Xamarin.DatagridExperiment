@@ -33,8 +33,10 @@ namespace ListViewTest01.UI
         public static readonly BindableProperty ColumnsProperty =
             BindableProperty.Create(nameof(Columns), typeof(RecordViewColumnCollection), typeof(RecordView),
                 //propertyChanged    : (b, o, n) => (b as RecordView).InitHeaderView(),
-                defaultValueCreator: b => { return (b as RecordView)?._columns; }
-        );
+                defaultValueCreator: b => { return (b as RecordView)?._columns; } );
+
+        public static readonly BindableProperty UniquePropertyNameProperty =
+            BindableProperty.Create(nameof(UniquePropertyName), typeof(string), typeof(RecordView), "Id");
 
         public static readonly BindableProperty HeaderHeightProperty =
             BindableProperty.Create(nameof(HeaderHeight), typeof(double), typeof(RecordView), 50d,
@@ -59,6 +61,22 @@ namespace ListViewTest01.UI
                     }
                 });
 
+        public static BindableProperty ItemsSourceProperty =
+            BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(RecordView), null);
+
+        /// <summary>
+        /// Bindable Property for SelectedItem.
+        /// </summary>
+        public static BindableProperty SelectedItemProperty =
+            BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(RecordView),
+                propertyChanged: (b, o, n) => { if (o != n) (b as RecordView)?.ItemSelected?.Invoke(b, new SelectedItemChangedEventArgs(n)); } );
+
+        /// <summary>
+        /// SelectedIndexProperty
+        /// </summary>
+        public static BindableProperty SelectedIndexProperty =
+            BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(RecordView), defaultValue: -1);
+
         public static readonly BindableProperty NoDataViewProperty =
             BindableProperty.Create(nameof(NoDataView), typeof(View), typeof(RecordView),
                 propertyChanged: (b, o, n) => {
@@ -67,8 +85,10 @@ namespace ListViewTest01.UI
                         (b as RecordView).noDataView.Content = n as View;
                     }
                 });
+        #endregion Bindable Properties.
 
-　      public bool SelectionEnabled
+        #region Properties.
+        public bool SelectionEnabled
         {
             get { return (bool)GetValue(SelectionEnabledProperty); }
             set { SetValue(SelectionEnabledProperty, value); }
@@ -109,6 +129,12 @@ namespace ListViewTest01.UI
             //set { SetValue(ColumnsProperty, value); }
         }
 
+        public string UniquePropertyName
+        {
+            get { return (string)GetValue(UniquePropertyNameProperty); }
+            set { SetValue(UniquePropertyNameProperty, value); }
+        }
+        
         public double RowHeight
         {
             get { return (double)GetValue(RowHeightProperty); }
@@ -133,14 +159,46 @@ namespace ListViewTest01.UI
             set { SetValue(FloatColumnTotalWidthProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the items source.
+        /// </summary>
+        /// <value>The items source.</value>
+        public IEnumerable ItemsSource
+        {
+            get => (IEnumerable)GetValue(ItemsSourceProperty);
+            set => SetValue(ItemsSourceProperty, value);
+        }
+
+        /// <summary>
+        /// SelectedItem Property.
+        /// </summary>
+        public object SelectedItem
+        {
+            get { return (object)GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
+        }
+
+        /// <summary>
+        /// SelectedIndex
+        /// </summary>
+        public int SelectedIndex
+        {
+            get { return (int)GetValue(SelectedIndexProperty); }
+            set { SetValue(SelectedIndexProperty, value); }
+        }
+
         public View NoDataView
         {
             get { return (View)GetValue(NoDataViewProperty); }
             set { SetValue(NoDataViewProperty, value); }
         }
-        #endregion Bindable Properties.
+        #endregion Properties.
 
-        #region Properties.
+        #region events.
+        public event EventHandler<Xamarin.Forms.SelectedItemChangedEventArgs> ItemSelected;
+        #endregion events.
+
+        #region private Properties.
         /// <summary>
         /// Headerを格納してるElement
         /// </summary>
@@ -151,7 +209,7 @@ namespace ListViewTest01.UI
         /// </summary>
         Element BodyElement   { get; }
 
-        #endregion Properties.
+        #endregion private Properties.
 
         #region Members.
         private List<ClickableLabel> headers = new List<ClickableLabel>();
@@ -166,19 +224,11 @@ namespace ListViewTest01.UI
 #if true
             masterListView.SortData.Type = typeof(ListViewItem);
             masterListView.AddSlave(slaveListView);
-            //listView00.Refresh();
 
-            // headersにヘッダカラムを追加していく
-            //headers.Add(Columns[0].TitleLabel);
-            //headers.Add(col1);
-            //headers.Add(col2);
-            //headers.Add(col3);
-            //headers.Add(col4);
-            //headers.Add(col5);
+            HeaderElement     = headerGrid;
+            BodyElement       = bodyGrid;
 
-            HeaderElement     = HeaderGrid;
-            BodyElement       = BodyGrid;
-
+            
             TapCommand = new Command(x =>
             {
                 System.Diagnostics.Debug.WriteLine(x);
@@ -192,7 +242,7 @@ namespace ListViewTest01.UI
             //HeaderScrollViewH.Scrolled += (s, r) => 
             //{
             //};
-            BodyScrollViewH.Scrolled += async(s, r) =>
+            bodyScrollViewH.Scrolled += async(s, r) =>
             {
                 //var pos = BodyScrollViewH.Position;
 
@@ -203,23 +253,13 @@ namespace ListViewTest01.UI
                 //HeaderScrollViewH.;
                 //System.Diagnostics.Debug.WriteLine($"BodyScrollViewH.Scrolled pos.X={r.X}");
                 //System.Diagnostics.Debug.WriteLine($"{ Test00.Width},  { Test01.Width}");
-               
             };
 #endif
         }
 
-        private void UpdateRowSize()
-        {
-            var col0s = masterListView.Children;
-            var cols  = slaveListView.Children;
-
-
-
-            var binding = new Binding("Width", BindingMode.OneWay, source: Columns[0]);
-
-            col0s[0].SetBinding(View.WidthRequestProperty, binding);
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
         private void InitHeaderView()
         {
             var columns = Columns;
@@ -229,34 +269,32 @@ namespace ListViewTest01.UI
                 return;
             }
 
-            var fixedWidth = columns.Where(x => x.IsFixedColumn).Sum(x => x.Width);
-            HeaderGrid.ColumnDefinitions[0].Width = fixedWidth;
-            BodyGrid.ColumnDefinitions[0].Width   = fixedWidth;
+            ////
+            /// 各メンバの初期化
+            //
+            headers.Clear();
+            fixedHeaderEntryPoint.Children.Clear();
+            floatedHeaderEntryPoint.Children.Clear();
 
+            ////
+            /// ヘッダの横幅を初期化
+            //
+            var fixedWidth = columns.Where(x => x.IsFixedColumn).Sum(x => x.Width);
+            headerGrid.ColumnDefinitions[0].Width = fixedWidth;
+            bodyGrid.ColumnDefinitions[0].Width   = fixedWidth;
+
+            ////
+            /// ヘッダ高さを初期化
+            //
             var height = HeaderHeight;
             columns.Select(x => x.TitleLabel)
                    .Where(x => x.HeightRequest != height)
                    .ToList()
                    .ForEach(x => x.HeightRequest = height);
 
-            headers.Clear();
-            fixedHeaderEntryPoint.Children.Clear();
-            floatedHeaderEntryPoint.Children.Clear();
-
-            //columns.Take(1)
-            //       .ToList()
-            //       .ForEach(x => {
-            //           headers.Add(x.TitleLabel);
-                       
-            //       });
-
-            //columns.Skip(1)
-            //       .ToList()
-            //       .ForEach(x => {
-            //           headers.Add(x.TitleLabel);
-            //           floatedHeaderEntryPoint.Children.Add(x.TitleLabel);
-            //       });
-
+            ////
+            /// ヘッダボタンの登録
+            //
             columns.ToList()
                    .ForEach(x => {
                        headers.Add(x.TitleLabel);
@@ -270,8 +308,8 @@ namespace ListViewTest01.UI
                        }
                    });
 
-            //
-            // ソートラベルの描画状態を更新
+            ////
+            /// ソートラベルの描画状態を更新
             //
             var sortData = masterListView.SortData;
             foreach (var header in headers)

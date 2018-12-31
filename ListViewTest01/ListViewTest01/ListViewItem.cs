@@ -29,5 +29,10 @@ namespace ListViewTest01
         //string data05 = string.Empty;
         [System.ComponentModel.DefaultValue("")]
         public string Data05 { get; set; }
+
+        public override string ToString()
+        {
+            return $"{nameof(ListViewItem)} - Id:{Id}";
+        }
     }
 }

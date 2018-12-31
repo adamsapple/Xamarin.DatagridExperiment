@@ -19,7 +19,9 @@
             <Label Text="LapGrid サンプル" 
                    TextColor="Accent" BackgroundColor="Transparent" />
             <!--<local:LapGrid />-->
-            <ui:RecordView RowHeight="30" HeaderHeight="40">
+            <ui:RecordView x:Name="recordView"
+                           ItemsSource="{Binding Items}"
+                           RowHeight="30" HeaderHeight="40" UniquePropertyName="Id">
               <ui:RecordView.Columns>
                   <ui:RecordViewColumn Title="Id"     PropertyName="Id"     IsFixedColumn="True"  Width="50"/>
                   <ui:RecordViewColumn Title="Data01" PropertyName="Data01" IsFixedColumn="True" Width="100"/>

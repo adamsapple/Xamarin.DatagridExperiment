@@ -36,6 +36,12 @@ namespace ListViewTest01.UI
             BindableProperty.Create(nameof(Columns), typeof(RecordViewColumnCollection), typeof(RecordViewCell), null,
                 propertyChanged: (b,o,n) => (b as RecordViewCell)?.CreateContent());
 
+        
+
+        public RecordViewCell()
+        {
+        }
+
         public void CreateContent()
         {
             var view = new StackLayout
@@ -44,16 +50,17 @@ namespace ListViewTest01.UI
                 Padding         = new Thickness(0),
                 Margin          = new Thickness(0),
                 Orientation     = StackOrientation.Horizontal,
-                VerticalOptions = LayoutOptions.FillAndExpand,
+                //VerticalOptions = LayoutOptions.FillAndExpand,
             };
             
             Columns?.Where(x => x.IsFixedColumn == IsFixedColumn).ToList().ForEach(x =>
             {
                 var label = new Label
                 {
+                    LineBreakMode           = LineBreakMode.NoWrap,
                     HorizontalTextAlignment = TextAlignment.Center,
                     VerticalTextAlignment   = TextAlignment.Center,
-                    HorizontalOptions       = LayoutOptions.FillAndExpand,
+                    //HorizontalOptions       = LayoutOptions.FillAndExpand,
                 };
                 label.SetBinding(Label.TextProperty, x.PropertyName);
                 label.SetBinding(Label.WidthRequestProperty, new Binding("Width", source: x));
