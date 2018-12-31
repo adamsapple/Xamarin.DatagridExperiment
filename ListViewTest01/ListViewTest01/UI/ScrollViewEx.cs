@@ -49,14 +49,7 @@ namespace ListViewTest01.UI
 		/// The animate scroll property
 		/// </summary>
 		public static readonly BindableProperty AnimateScrollProperty =
-            BindableProperty.Create(
-                    "AnimateScroll",
-                    typeof(bool),
-                    typeof(ScrollViewEx),
-                    false,
-                    BindingMode.TwoWay,
-                    propertyChanged: null,
-                    propertyChanging: null);
+            BindableProperty.Create(nameof(AnimateScroll), typeof(bool), typeof(ScrollViewEx), false);
 
         /// <summary>
         /// Gets or sets a value indicating whether [animate scroll].

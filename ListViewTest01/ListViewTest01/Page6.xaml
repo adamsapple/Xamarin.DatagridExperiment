@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:ListViewTest01"
              xmlns:ui="clr-namespace:ListViewTest01.UI"
-             x:Class="ListViewTest01.Page5">
+             x:Class="ListViewTest01.Page6">
     <ContentPage.BindingContext>
         <local:ViewModel />
     </ContentPage.BindingContext>
@@ -16,19 +16,19 @@
     </ContentPage.Padding>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="LapGrid サンプル" 
+            <Label Text="Page6 サンプル" 
                    TextColor="Accent" BackgroundColor="Transparent" />
             <!--<local:LapGrid />-->
-            <ui:RecordView RowHeight="30" HeaderHeight="40">
-              <ui:RecordView.Columns>
-                  <ui:RecordViewColumn Title="Id"     PropertyName="Id"     Width="50"/>
-                  <ui:RecordViewColumn Title="Data01" PropertyName="Data01" Width="100"/>
-                  <ui:RecordViewColumn Title="Data02" PropertyName="Data02" Width="100"/>
-                  <ui:RecordViewColumn Title="Data03" PropertyName="Data03" Width="100"/>
-                  <ui:RecordViewColumn Title="Data04" PropertyName="Data04" Width="100"/>
-                  <ui:RecordViewColumn Title="Data05" PropertyName="Data05" Width="100"/>
-              </ui:RecordView.Columns>
-            </ui:RecordView>
+            <ui:GridView>
+                <ui:GridView.Columns>
+                    <ui:GridViewColumn Title="Id"     PropertyName="Id"     Width="50"/>
+                    <ui:GridViewColumn Title="Data01" PropertyName="Data01" Width="100"/>
+                    <ui:GridViewColumn Title="Data02" PropertyName="Data02" Width="100"/>
+                    <ui:GridViewColumn Title="Data03" PropertyName="Data03" Width="100"/>
+                    <ui:GridViewColumn Title="Data04" PropertyName="Data04" Width="100"/>
+                    <ui:GridViewColumn Title="Data05" PropertyName="Data05" Width="100"/>
+                </ui:GridView.Columns>
+            </ui:GridView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

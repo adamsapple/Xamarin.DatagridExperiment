@@ -2,7 +2,8 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ui="clr-namespace:ListViewTest01.UI"
-             x:Class="ListViewTest01.UI.LapTimeGridView">
+             x:Class="ListViewTest01.UI.RecordView"
+             x:Name="self">
     <ContentView.Resources>
         <ResourceDictionary>
             <x:Double x:Key="HeaderWidth">50</x:Double>
@@ -58,42 +59,48 @@
                     }
                 ]]>
             </StyleSheet>
+            <ui:RecordViewDataTemplateSelector x:Key="RecordVirewDataTemplateSelector" RecordView="{x:Reference self}"></ui:RecordViewDataTemplateSelector>
         </ResourceDictionary>
     </ContentView.Resources>
     <ContentView.Content>
         <StackLayout Spacing="0" >
+            
             <!--
             ヘッダ
             -->
             <!--<StackLayout Orientation="Horizontal" Padding="0" Margin="0">-->
             <Grid x:Name="HeaderGrid"
+                  BackgroundColor="{Binding HeaderBackgroundColor, Source={x:Reference self}}"
                   RowSpacing="0" ColumnSpacing="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{StaticResource Key=HeaderWidth}" />
+                    <!--<ColumnDefinition Width="{StaticResource Key=HeaderWidth}" />-->
+                    <ColumnDefinition Width="0" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="{StaticResource Key=HeaderHeight}" />
+                    <RowDefinition Height="{Binding HeaderHeight, Source={x:Reference self}}" />
                 </Grid.RowDefinitions>
                 <!--
                 固定カラム
                 -->
-                <ui:ClickableLabel x:Name="col0"
+                <ContentView x:Name="fixedHeaderEntryPoint"/>
+                <!--<ui:ClickableLabel x:Name="col0"
                                    Grid.Column="0" Grid.Row="0"
-                                   ColmnName="Id" Clicked="HeaderColumn_Clicked" StyleClass="header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                                   ColmnName="Id" Clicked="HeaderColumn_Clicked" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>-->
                 <!--
                 スクロールカラム
                 -->
                 <ui:HideHBarScrollView x:Name="HeaderScrollViewH"
                                        Grid.Column="1" Grid.Row="0"
                                        Orientation="Horizontal" Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
-                    <StackLayout HeightRequest="{StaticResource Key=RowHeight}" Orientation="Horizontal"
+                    <StackLayout x:Name="floatedHeaderEntryPoint"
+                                 HeightRequest="{Binding HeaderHeight, Source={x:Reference self}}" Orientation="Horizontal"
                                  Spacing="0" Padding="0" Margin="0">
-                        <ui:ClickableLabel x:Name="col1" ColmnName="Data01" Clicked="HeaderColumn_Clicked" StyleClass="col_time, header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
-                        <ui:ClickableLabel x:Name="col2" ColmnName="Data02" Clicked="HeaderColumn_Clicked" StyleClass="col_time, header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
-                        <ui:ClickableLabel x:Name="col3" ColmnName="Data03" Clicked="HeaderColumn_Clicked" StyleClass="col_time, header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
-                        <ui:ClickableLabel x:Name="col4" ColmnName="Data04" Clicked="HeaderColumn_Clicked" StyleClass="col_time, header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
-                        <ui:ClickableLabel x:Name="col5" ColmnName="Data05" Clicked="HeaderColumn_Clicked" StyleClass="col_time, header_col" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                        <!--<ui:ClickableLabel x:Name="col1" ColmnName="Data01" Clicked="HeaderColumn_Clicked" StyleClass="col_time" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                        <ui:ClickableLabel x:Name="col2" ColmnName="Data02" Clicked="HeaderColumn_Clicked" StyleClass="col_time" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                        <ui:ClickableLabel x:Name="col3" ColmnName="Data03" Clicked="HeaderColumn_Clicked" StyleClass="col_time" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                        <ui:ClickableLabel x:Name="col4" ColmnName="Data04" Clicked="HeaderColumn_Clicked" StyleClass="col_time" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                        <ui:ClickableLabel x:Name="col5" ColmnName="Data05" Clicked="HeaderColumn_Clicked" StyleClass="col_time" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>-->
                     </StackLayout>
                 </ui:HideHBarScrollView>
             </Grid>
@@ -106,7 +113,8 @@
                 <Grid x:Name="BodyGrid"
                       RowSpacing="0" ColumnSpacing="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{StaticResource Key=HeaderWidth}" />
+                        <!--<ColumnDefinition Width="{StaticResource Key=HeaderWidth}" />-->
+                        <ColumnDefinition Width="0" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -115,22 +123,26 @@
                     <!--
                     固定カラム
                     -->
-                    <ui:RepeaterView x:Name="listView00"
+                    <ui:RepeaterView x:Name="masterListView"
                                      ItemsSource="{Binding Items}"
+                                     ItemTemplate="{StaticResource RecordViewDataTemplateSelector}"
                                      Grid.Column="0" Grid.Row="0"
-                                     StyleClass="col_id" Spacing="0" Padding="0" Margin="0">
+                                     BackgroundColor="{Binding FixedColumnBackgroundColor, Source={x:Reference self}}"
+                                     Spacing="0" Padding="0" Margin="0">
                         <!--x:TypeArguments="local:ListViewItem"-->
-                        <ui:RepeaterView.ItemTemplate>
+                        <!--<ui:RepeaterView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <StackLayout HeightRequest="{StaticResource Key=RowHeight}" Spacing="0" Padding="0" Margin="0">
+                                    <StackLayout HeightRequest="{Binding RowHeight, Source={x:Reference self}}" Spacing="0" Padding="0" Margin="0">
                                         <StackLayout  Orientation="Horizontal"  Spacing="0" Padding="0" Margin="0" VerticalOptions="FillAndExpand">
-                                            <Label Text="{Binding Id}" WidthRequest="{StaticResource Key=HeaderWidth}" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                                            <Label Text="{Binding Path=Id}" WidthRequest="{Binding Columns[0].Width, Source={x:Reference self}}" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
                                         </StackLayout>
                                     </StackLayout>
                                 </ViewCell>
+                                <ui:RecordViewFixedColumnCell Columns="{Binding Columns, Source={x:Reference self}}"  Height="{Binding RowHeight, Source={x:Reference self}}">
+                                </ui:RecordViewFixedColumnCell>
                             </DataTemplate>
-                        </ui:RepeaterView.ItemTemplate>
+                        </ui:RepeaterView.ItemTemplate>-->
                     </ui:RepeaterView>
                     <!--
                     スクロールカラム
@@ -139,24 +151,26 @@
                                      AnimateScroll="True"
                                      Grid.Column="1" Grid.Row="0"
                                      Orientation="Horizontal"
-                                     HorizontalOptions="FillAndExpand" BackgroundColor="White">
+                                     HorizontalOptions="FillAndExpand">
                         <!--<StackLayout Orientation="Vertical" Padding="0" Margin="0">-->
-                        <ui:RepeaterView x:Name="listView01" UniqueId="Id"
+                        <ui:RepeaterView x:Name="slaveListView" UniqueId="Id"
                                          Spacing="0" Padding="0" Margin="0">
                             <!--x:TypeArguments="local:ListViewItem"-->
                             <ui:RepeaterView.ItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
-                                        <StackLayout HeightRequest="{StaticResource Key=RowHeight}" Spacing="0" Padding="0" Margin="0">
-                                            <StackLayout Orientation="Horizontal" Spacing="0" Padding="0" Margin="0" VerticalOptions="FillAndExpand">
-                                                <!--<Label Text="{Binding Id}"/>-->
-                                                <Label Text="{Binding Data01}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                                <Label Text="{Binding Data02}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                                <Label Text="{Binding Data03}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                                <Label Text="{Binding Data04}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                                <Label Text="{Binding Data05}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                        <!--<ViewCell.View HeightRequest="{Binding RowHeight, Source={x:Reference self}}" Spacing="0" Padding="0" Margin="0">-->
+                                            <StackLayout HeightRequest="{Binding RowHeight, Source={x:Reference self}}" Spacing="0" Padding="0" Margin="0">
+                                                <StackLayout Orientation="Horizontal" Spacing="0" Padding="0" Margin="0" VerticalOptions="FillAndExpand">
+                                                    <!--<Label Text="{Binding Id}"/>-->
+                                                    <Label Text="{Binding Data01}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                                    <Label Text="{Binding Data02}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                                    <Label Text="{Binding Data03}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                                    <Label Text="{Binding Data04}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                                    <Label Text="{Binding Data05}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                                 </StackLayout>
                                             </StackLayout>
-                                        </StackLayout>
+                                        <!--</ViewCell.View>-->
                                     </ViewCell>
                                 </DataTemplate>
                             </ui:RepeaterView.ItemTemplate>
@@ -165,6 +179,7 @@
                     </ui:ScrollViewEx>
                 </Grid>
             </ScrollView>
+            <ContentView x:Name="noDataView" IsVisible="False"/>
         </StackLayout>
     </ContentView.Content>
 </ContentView>

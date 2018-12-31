@@ -17,34 +17,66 @@ namespace ListViewTest01.UI
     {
         #region Bindable Properties.
         /// <summary>
+        /// Bindable Property for UniqueId.
+        /// </summary>
+        public static readonly BindableProperty UniqueIdProperty =
+            BindableProperty.Create(nameof(ItemTemplate), typeof(string), typeof(RepeaterView), defaultValue: "Id");
+
+        /// <summary>
         /// The item template property.
         /// </summary>
-        public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(RepeaterView), null,
-                                                                                                propertyChanged: (bindable, value, newValue) => Populate(bindable));
+        public static readonly BindableProperty ItemTemplateProperty = 
+            BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(RepeaterView), propertyChanged: (bindable, value, newValue) => Populate(bindable));
 
         /// <summary>
         /// The items source property.
         /// </summary>
-        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(RepeaterView), null,
-                                                                                                //BindingMode.TwoWay,
-                                                                                                propertyChanged: (bindable, value, newValue) =>
-                                                                                                {
-                                                                                                    var self = bindable as RepeaterView;
+        public static readonly BindableProperty ItemsSourceProperty = 
+            BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(RepeaterView),
+                //BindingMode.TwoWay,
+                propertyChanged: (bindable, value, newValue) =>
+                {
+                    var self = bindable as RepeaterView;
 
-                                                                                                    if (value is INotifyCollectionChanged oldNcc)
-                                                                                                    {
-                                                                                                        oldNcc.CollectionChanged -= self.OnCollectionChanged;
-                                                                                                    }
+                    if (value is INotifyCollectionChanged oldNcc)
+                    {
+                        oldNcc.CollectionChanged -= self.OnCollectionChanged;
+                    }
 
-                                                                                                    if (newValue is INotifyCollectionChanged newNcc)
-                                                                                                    {
-                                                                                                        newNcc.CollectionChanged += self.OnCollectionChanged;
-                                                                                                    }
+                    if (newValue is INotifyCollectionChanged newNcc)
+                    {
+                        newNcc.CollectionChanged += self.OnCollectionChanged;
+                    }
 
-                                                                                                    Populate(bindable);
-                                                                                                }
-                                                                                            );
+                    Populate(bindable);
+                }
+            );
+        /// <summary>
+        /// Bindable Propertiy for SelecctedRowColor.
+        /// </summary>
+        public static readonly BindableProperty SelecctedRowColorProperty =
+            BindableProperty.Create(nameof(SelecctedRowColor), typeof(Color), typeof(RecordView), defaultValue: Color.Orange);
 
+        /// <summary>
+        /// Bindable Propertiy for EvenRowBackGroundColor.
+        /// </summary>
+        public static readonly BindableProperty EvenRowBackgroundColorProperty =
+            BindableProperty.Create(nameof(EvenRowBackgroundColor), typeof(Color), typeof(RecordView), defaultValue: Color.FromRgba(0, 0, 0, 0.04), propertyChanged: BackgroundColorChanged);
+
+        /// <summary>
+        /// Bindable Property for SelectedItem.
+        /// </summary>
+        public static BindableProperty SelectedItemProperty =
+            BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(RepeaterView), propertyChanged: SelectedItemChanged);
+
+        /// <summary>
+        /// SelectedIndexProperty
+        /// </summary>
+        public static BindableProperty SelectedIndexProperty =
+            BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(RepeaterView), defaultValue: -1);
+        #endregion Bindable Properties.
+
+        #region Properties.
         /// <summary>
         /// Gets or sets the items source.
         /// </summary>
@@ -70,17 +102,6 @@ namespace ListViewTest01.UI
         }
 
         /// <summary>
-        /// Bindable Property for SelectedItem.
-        /// </summary>
-        public static BindableProperty SelectedItemProperty =
-            BindableProperty.Create(
-                nameof(SelectedItem),
-                typeof(object),
-                typeof(RepeaterView),
-                null,
-                propertyChanged:  UpdateSelected);
-
-        /// <summary>
         /// SelectedItem Property.
         /// </summary>
         public object SelectedItem
@@ -88,18 +109,6 @@ namespace ListViewTest01.UI
             get { return (object)GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }
         }
-
-        private View SelectedContent { get; set; }
-
-        /// <summary>
-        /// SelectedIndexProperty
-        /// </summary>
-        public static BindableProperty SelectedIndexProperty =
-            BindableProperty.Create(
-                nameof(SelectedIndex),
-                typeof(int),
-                typeof(RepeaterView),
-                -1);
 
         /// <summary>
         /// SelectedIndex
@@ -109,13 +118,36 @@ namespace ListViewTest01.UI
             get { return (int)GetValue(SelectedIndexProperty); }
             set { SetValue(SelectedIndexProperty, value); }
         }
-        #endregion Bindable Properties.
+        /// <summary>
+        /// 
+        /// </summary>
+        public Color SelecctedRowColor
+        {
+            get { return (Color)GetValue(SelecctedRowColorProperty); }
+            set { SetValue(SelecctedRowColorProperty, value); }
+        }
 
         /// <summary>
         /// 
         /// </summary>
-        public string UniqueId { get; set; } = "Id";
+        public Color EvenRowBackgroundColor
+        {
+            get => (Color)this.GetValue(EvenRowBackgroundColorProperty);
+            set => this.SetValue(EvenRowBackgroundColorProperty, value);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string UniqueId
+        {
+            get { return (string)GetValue(UniqueIdProperty); }
+            set { SetValue(UniqueIdProperty, value); }
+        }
+        #endregion Properties.
 
+
+        private View SelectedContent { get; set; }
+        
         public IEnumerable SelfOrMasterItemsSource => ItemsSource ?? Master?.ItemsSource;
 
         /// <summary>
@@ -136,7 +168,10 @@ namespace ListViewTest01.UI
 
             foreach (var viewModel in itemsSource)
             {
-                var content = this.ItemTemplate.CreateContent();
+                //var content = this.ItemTemplate.CreateContent();
+                //BindableObject bindableObject = (BindableObject)(content = (View)ItemTemplate.CreateContent(viewModel, this));
+                var content = ItemTemplate.CreateContent(viewModel, this);
+                //var content = this.ItemTemplate.();
                 var view    = content is View ? content as View : (content as ViewCell).View;
 
                 if (view == null)
@@ -145,7 +180,7 @@ namespace ListViewTest01.UI
                 }
 
                 view.Margin          = new Thickness(0);
-                view.BackgroundColor = (Children.Count() % 2 == 0) ? Color.Transparent : Color.FromRgba(0, 0, 0, 0.04);
+                view.BackgroundColor = (Children.Count() % 2 == 0) ? Color.Transparent : EvenRowBackgroundColor;
                 view.BindingContext  = viewModel;
 
                 if (!view.GestureRecognizers.Any())
@@ -170,6 +205,38 @@ namespace ListViewTest01.UI
                 slave.Refresh();
             }
         }
+
+        public void UpdateBackgroundColor()
+        {
+            if (Slaves.Any())
+            {
+                Slaves.ForEach(x => x.UpdateBackgroundColor());
+            }
+        }
+
+        #region Static method for Bindable Properties.
+        /// <summary>
+        /// Binding:SelectedIndexの更新
+        /// </summary>
+        /// <param name="bindable"></param>
+        /// <param name="oldvalue"></param>
+        /// <param name="newvalue"></param>
+        private static void SelectedItemChanged(BindableObject bindable, object oldvalue, object newvalue)
+        {
+            (bindable as RepeaterView)?.UpdateSelectedIndexBySelectedItem();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bindable"></param>
+        /// <param name="oldvalue"></param>
+        /// <param name="newvalue"></param>
+        public static void BackgroundColorChanged(BindableObject bindable, object oldvalue, object newvalue)
+        {
+            (bindable as RepeaterView)?.UpdateBackgroundColor();
+        }
+        #endregion Static method for Bindable Properties.
 
         /// <summary>
         /// 選択物の更新
@@ -215,7 +282,7 @@ namespace ListViewTest01.UI
             if (view != null)
             {
                 SelectedContent = (view as Layout<View> as StackLayout).Children[0];
-                SelectedContent.BackgroundColor = Color.Red;
+                SelectedContent.BackgroundColor = SelecctedRowColor;
             }
         }
 
@@ -333,18 +400,6 @@ namespace ListViewTest01.UI
         }
 
         /// <summary>
-        /// Binding:SelectedIndexの更新
-        /// </summary>
-        /// <param name="bindable"></param>
-        /// <param name="oldvalue"></param>
-        /// <param name="newvalue"></param>
-        private static void UpdateSelected(BindableObject bindable, object oldvalue, object newvalue)
-        {
-            var self = bindable as RepeaterView;
-            self?.UpdateSelectedIndexBySelectedItem();
-        }
-
-        /// <summary>
         /// SelectedIndexの更新
         /// </summary>
         private int UpdateSelectedIndexBySelectedItem()
@@ -360,7 +415,7 @@ namespace ListViewTest01.UI
                 SelectedIndex = itemSource.IndexOf(SelectedItem);
             }
 
-            System.Diagnostics.Debug.WriteLine($"SelectedIndex={SelectedIndex}");
+            //System.Diagnostics.Debug.WriteLine($"SelectedIndex={SelectedIndex}");
 
             return SelectedIndex;
         }

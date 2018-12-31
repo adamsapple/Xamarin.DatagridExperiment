@@ -25,6 +25,8 @@ namespace ListViewTest01.UI.Droid
     {
         public HideHBarScrollViewRenderer(Context context) : base(context)
         {
+            
+            
         }
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)
@@ -35,7 +37,7 @@ namespace ListViewTest01.UI.Droid
             {
                 return;
             }
-                
+            
             if (e.OldElement != null)
             {
                 e.OldElement.PropertyChanged -= OnElementPropertyChanged;
@@ -55,6 +57,7 @@ namespace ListViewTest01.UI.Droid
                 var child = GetChildAt(0);
                 child.HorizontalScrollBarEnabled = false;
                 child.VerticalScrollBarEnabled   = false;
+                child.ScrollbarFadingEnabled     = false;
             }
         }
 
