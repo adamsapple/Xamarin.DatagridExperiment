@@ -59,7 +59,6 @@
                     }
                 ]]>
             </StyleSheet>
-            <ui:RecordViewDataTemplateSelector x:Key="RecordVirewDataTemplateSelector" RecordView="{x:Reference self}"></ui:RecordViewDataTemplateSelector>
         </ResourceDictionary>
     </ContentView.Resources>
     <ContentView.Content>
@@ -125,24 +124,16 @@
                     -->
                     <ui:RepeaterView x:Name="masterListView"
                                      ItemsSource="{Binding Items}"
-                                     ItemTemplate="{StaticResource RecordViewDataTemplateSelector}"
                                      Grid.Column="0" Grid.Row="0"
                                      BackgroundColor="{Binding FixedColumnBackgroundColor, Source={x:Reference self}}"
                                      Spacing="0" Padding="0" Margin="0">
                         <!--x:TypeArguments="local:ListViewItem"-->
-                        <!--<ui:RepeaterView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <StackLayout HeightRequest="{Binding RowHeight, Source={x:Reference self}}" Spacing="0" Padding="0" Margin="0">
-                                        <StackLayout  Orientation="Horizontal"  Spacing="0" Padding="0" Margin="0" VerticalOptions="FillAndExpand">
-                                            <Label Text="{Binding Path=Id}" WidthRequest="{Binding Columns[0].Width, Source={x:Reference self}}" Margin="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
-                                        </StackLayout>
-                                    </StackLayout>
-                                </ViewCell>
-                                <ui:RecordViewFixedColumnCell Columns="{Binding Columns, Source={x:Reference self}}"  Height="{Binding RowHeight, Source={x:Reference self}}">
-                                </ui:RecordViewFixedColumnCell>
+                        <ui:RepeaterView.ItemTemplate>
+                            <DataTemplate >
+                                <ui:RecordViewCell IsFixedColumn="True" Height="{Binding RowHeight, Source={x:Reference self}}" Columns="{Binding Columns, Source ={x:Reference self}}"/>
+                                <!--<ui:RecordViewFixedColumnCell Columns="{Binding Columns, Source={x:Reference self}}"  Height="{Binding RowHeight, Source={x:Reference self}}">-->
                             </DataTemplate>
-                        </ui:RepeaterView.ItemTemplate>-->
+                        </ui:RepeaterView.ItemTemplate>
                     </ui:RepeaterView>
                     <!--
                     スクロールカラム
@@ -158,20 +149,7 @@
                             <!--x:TypeArguments="local:ListViewItem"-->
                             <ui:RepeaterView.ItemTemplate>
                                 <DataTemplate>
-                                    <ViewCell>
-                                        <!--<ViewCell.View HeightRequest="{Binding RowHeight, Source={x:Reference self}}" Spacing="0" Padding="0" Margin="0">-->
-                                            <StackLayout HeightRequest="{Binding RowHeight, Source={x:Reference self}}" Spacing="0" Padding="0" Margin="0">
-                                                <StackLayout Orientation="Horizontal" Spacing="0" Padding="0" Margin="0" VerticalOptions="FillAndExpand">
-                                                    <!--<Label Text="{Binding Id}"/>-->
-                                                    <Label Text="{Binding Data01}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                                    <Label Text="{Binding Data02}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                                    <Label Text="{Binding Data03}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                                    <Label Text="{Binding Data04}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                                    <Label Text="{Binding Data05}" StyleClass="col_time" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                                 </StackLayout>
-                                            </StackLayout>
-                                        <!--</ViewCell.View>-->
-                                    </ViewCell>
+                                    <ui:RecordViewCell IsFixedColumn="False" Height="{Binding RowHeight, Source={x:Reference self}}" Columns="{Binding Columns, Source ={x:Reference self}}"/>
                                 </DataTemplate>
                             </ui:RepeaterView.ItemTemplate>
                         </ui:RepeaterView>

@@ -179,7 +179,7 @@ namespace ListViewTest01.UI
                     throw new Exception($"Invalid visual object {nameof(content)}");
                 }
 
-                view.Margin          = new Thickness(0);
+                //view.Margin          = new Thickness(0);
                 view.BackgroundColor = (Children.Count() % 2 == 0) ? Color.Transparent : EvenRowBackgroundColor;
                 view.BindingContext  = viewModel;
 
@@ -281,8 +281,12 @@ namespace ListViewTest01.UI
                 
             if (view != null)
             {
-                SelectedContent = (view as Layout<View> as StackLayout).Children[0];
-                SelectedContent.BackgroundColor = SelecctedRowColor;
+                //SelectedContent = (view as Layout<View> as StackLayout).Children[0];
+                SelectedContent = (view as ContentView)?.Content;
+                if (SelectedContent != null)
+                {
+                    SelectedContent.BackgroundColor = SelecctedRowColor;
+                }
             }
         }
 

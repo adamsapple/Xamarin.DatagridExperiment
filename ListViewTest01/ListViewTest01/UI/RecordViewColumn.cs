@@ -31,7 +31,10 @@ namespace ListViewTest01.UI
 
         public static readonly BindableProperty PropertyNameProperty =
             BindableProperty.Create(nameof(PropertyName), typeof(string), typeof(RecordViewColumn), string.Empty,
-                propertyChanged: (b, o, n) => { if (o != n) (b as RecordViewColumn).TitleLabel.ColmnName = (string) n; });
+                propertyChanged: (b, o, n) => { if (o != n) (b as RecordViewColumn).TitleLabel.ColmnName = (string)n; });
+
+        public static readonly BindableProperty IsFixedColumnProperty =
+            BindableProperty.Create(nameof(IsFixedColumn), typeof(bool), typeof(RecordViewColumn), false);
 
         //public static readonly BindableProperty StringFormatProperty =
         //    BindableProperty.Create(nameof(StringFormat), typeof(string), typeof(RecordViewColumn), null);
@@ -96,6 +99,12 @@ namespace ListViewTest01.UI
         {
             get { return (string)GetValue(PropertyNameProperty); }
             set { SetValue(PropertyNameProperty, value); }
+        }
+
+        public bool IsFixedColumn
+        {
+            get { return (bool)GetValue(IsFixedColumnProperty); }
+            set { SetValue(IsFixedColumnProperty, value); }
         }
 
         //public string StringFormat

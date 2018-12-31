@@ -21,8 +21,8 @@
             <!--<local:LapGrid />-->
             <ui:RecordView RowHeight="30" HeaderHeight="40">
               <ui:RecordView.Columns>
-                  <ui:RecordViewColumn Title="Id"     PropertyName="Id"     Width="50"/>
-                  <ui:RecordViewColumn Title="Data01" PropertyName="Data01" Width="100"/>
+                  <ui:RecordViewColumn Title="Id"     PropertyName="Id"     IsFixedColumn="True"  Width="50"/>
+                  <ui:RecordViewColumn Title="Data01" PropertyName="Data01" IsFixedColumn="false" Width="100"/>
                   <ui:RecordViewColumn Title="Data02" PropertyName="Data02" Width="100"/>
                   <ui:RecordViewColumn Title="Data03" PropertyName="Data03" Width="100"/>
                   <ui:RecordViewColumn Title="Data04" PropertyName="Data04" Width="100"/>
