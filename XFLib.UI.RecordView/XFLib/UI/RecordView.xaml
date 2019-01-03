@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:XFLib.UI"
+             x:Class="XFLib.UI.RecordView"
+             x:Name="self">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="StackLayout">
+                <Setter Property="Spacing" Value="0" />
+                <Setter Property="Margin"  Value="0" />
+                <Setter Property="Padding" Value="0" />
+            </Style>
+            <!--<Style TargetType="Label">
+                <Setter Property="HeightRequest" Value="100" />
+                <Setter Property="WidthRequest" Value="600" />
+                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="Accent" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" /> 
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="Margin" Value="0" />
+            </Style>-->
+            <!--<Style TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="AntiqueWhite" />
+                <Setter Property="HeightRequest" Value="75" />
+                <Setter Property="WidthRequest" Value="250" />
+                <Setter Property="Margin" Value="0,5,0,15" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>-->
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <StackLayout>
+            <!--
+            ヘッダ
+            -->
+            <Grid x:Name="headerGrid"
+                  BackgroundColor="{Binding HeaderBackgroundColor, Source={x:Reference self}}"
+                  RowSpacing="0" ColumnSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{Binding HeaderHeight, Source={x:Reference self}}" />
+                </Grid.RowDefinitions>
+                <!--
+                固定カラム
+                -->
+                <StackLayout x:Name="fixedHeaderEntryPoint"
+                             Grid.Column="0" Grid.Row="0"
+                             HeightRequest="{Binding HeaderHeight, Source={x:Reference self}}" Orientation="Horizontal" />
+                <!--
+                スクロールカラム
+                -->
+                <ui:HideHBarScrollView x:Name="HeaderScrollViewH"
+                                       Grid.Column="1" Grid.Row="0"
+                                       Orientation="Horizontal" Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
+                    <StackLayout x:Name="floatedHeaderEntryPoint"
+                                 HeightRequest="{Binding HeaderHeight, Source={x:Reference self}}" Orientation="Horizontal" />
+                </ui:HideHBarScrollView>
+            </Grid>
+            <!--
+            ボディ
+            -->
+            <ScrollView x:Name="bodyScrollViewV"
+                        Orientation="Vertical">
+                <Grid x:Name="bodyGrid"
+                      RowSpacing="0" ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <!--
+                    固定カラム
+                    -->
+                    <ui:RepeaterView x:Name="masterListView"
+                                     ItemsSource="{Binding ItemsSource, Source={x:Reference self}}"
+                                     SelectedItem="{Binding SelectedItem, Mode=TwoWay, Source={x:Reference self}}"
+                                     SelectionEnabled="{Binding SelectionEnabled, Source={x:Reference self}}"
+                                     Grid.Column="0" Grid.Row="0"
+                                     BackgroundColor="{Binding FixedColumnBackgroundColor, Source={x:Reference self}}"
+                                     Spacing="0" Padding="0" Margin="0">
+                        <ui:RepeaterView.ItemTemplate>
+                            <DataTemplate >
+                                <ui:RecordViewCell IsFixedColumn="True" Height="{Binding RowHeight, Source={x:Reference self}}" Columns="{Binding Columns, Source ={x:Reference self}}" />
+                            </DataTemplate>
+                        </ui:RepeaterView.ItemTemplate>
+                    </ui:RepeaterView>
+                    <!--
+                    スクロールカラム
+                    -->
+                    <ui:ScrollViewEx x:Name="bodyScrollViewH"
+                                     AnimateScroll="True"
+                                     Grid.Column="1" Grid.Row="0"
+                                     Orientation="Horizontal"
+                                     HorizontalOptions="FillAndExpand">
+                        <ui:RepeaterView x:Name="slaveListView"
+                                         UniqueId="{Binding UniquePropertyName, Source={x:Reference self}}"
+                                         SelectionEnabled="{Binding SelectionEnabled, Source={x:Reference self}}"
+                                         Spacing="0" Padding="0" Margin="0">
+                            <ui:RepeaterView.ItemTemplate>
+                                <DataTemplate>
+                                    <ui:RecordViewCell IsFixedColumn="False" Height="{Binding RowHeight, Source={x:Reference self}}" Columns="{Binding Columns, Source ={x:Reference self}}" />
+                                </DataTemplate>
+                            </ui:RepeaterView.ItemTemplate>
+                        </ui:RepeaterView>
+                    </ui:ScrollViewEx>
+                </Grid>
+            </ScrollView>
+            <ContentView x:Name="noDataView" IsVisible="False"/>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>
