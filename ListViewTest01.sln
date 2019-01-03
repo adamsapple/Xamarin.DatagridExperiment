@@ -5,9 +5,18 @@ VisualStudioVersion = 15.0.27703.2018
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListViewTest01.Android", "ListViewTest01\ListViewTest01.Android\ListViewTest01.Android.csproj", "{E7AEFA94-5BB8-4013-AF62-51E0DEC3DCCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListViewTest01", "ListViewTest01\ListViewTest01\ListViewTest01.csproj", "{3187217F-4877-4349-BA3A-0CB17F1D3299}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListViewTest01", "ListViewTest01\ListViewTest01\ListViewTest01.csproj", "{3187217F-4877-4349-BA3A-0CB17F1D3299}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "XFLib.UI.RecordView", "XFLib.UI.RecordView\XFLib.UI.RecordView.shproj", "{30E7C08D-2175-4503-8F34-01211D4DDE88}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "XFLib.UI.RecordView.Android", "XFLib.UI.RecordView.Android\XFLib.UI.RecordView.Android.shproj", "{DAEEA701-09A2-4961-B7F6-DF056A100F85}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		XFLib.UI.RecordView\XFLib.UI.RecordView.projitems*{30e7c08d-2175-4503-8f34-01211d4dde88}*SharedItemsImports = 13
+		XFLib.UI.RecordView.Android\XFLib.UI.RecordView.Android.projitems*{daeea701-09a2-4961-b7f6-df056a100f85}*SharedItemsImports = 13
+		XFLib.UI.RecordView.Android\XFLib.UI.RecordView.Android.projitems*{e7aefa94-5bb8-4013-af62-51e0dec3dccd}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

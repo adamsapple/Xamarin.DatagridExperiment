@@ -102,5 +102,6 @@
       <Name>ListViewTest01</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\..\XFLib.UI.RecordView.Android\XFLib.UI.RecordView.Android.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

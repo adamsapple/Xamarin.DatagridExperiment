@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:ListViewTest01"
              xmlns:ui="clr-namespace:ListViewTest01.UI"
+             xmlns:rv="clr-namespace:XFLib.UI"
              x:Class="ListViewTest01.Page5">
     <ContentPage.BindingContext>
         <local:ViewModel />
@@ -19,13 +20,13 @@
             <Label Text="LapGrid サンプル" 
                    TextColor="Accent" BackgroundColor="Transparent" />
             <!--<local:LapGrid />-->
-            <ui:RecordView x:Name="recordView"
+            <rv:RecordView x:Name="recordView"
                            ItemsSource="{Binding Items}"
                            SelectionEnabled="False"
                            RowHeight="30" HeaderHeight="40" UniquePropertyName="Id">
-                <ui:RecordView.Columns>
-                    <ui:RecordViewColumn Title="Id"     PropertyName="Id" IsFixedColumn="True"  Width="60">
-                        <ui:RecordViewColumn.ColumnTemplate>
+                <rv:RecordView.Columns>
+                    <rv:RecordViewColumn Title="Id"     PropertyName="Id" IsFixedColumn="True"  Width="60">
+                        <rv:RecordViewColumn.ColumnTemplate>
                             <DataTemplate>
                                 <StackLayout Orientation="Horizontal" Spacing="0" Margin="0" Padding="0">
                                     <!--<Label Text="*" 
@@ -37,15 +38,15 @@
                                         HorizontalOptions="FillAndExpand" LineBreakMode="NoWrap" />
                                 </StackLayout>
                             </DataTemplate>
-                        </ui:RecordViewColumn.ColumnTemplate>    
-                    </ui:RecordViewColumn>
-                    <ui:RecordViewColumn Title="Data01" PropertyName="Data01" IsFixedColumn="True" Width="100"/>
-                    <ui:RecordViewColumn Title="Data02" PropertyName="Data02" Width="100"/>
-                    <ui:RecordViewColumn Title="Data03" PropertyName="Data03" Width="100"/>
-                    <ui:RecordViewColumn Title="Data04" PropertyName="Data04" Width="100"/>
-                    <ui:RecordViewColumn Title="Data05" PropertyName="Data05" Width="100"/>
-                </ui:RecordView.Columns>
-            </ui:RecordView>
+                        </rv:RecordViewColumn.ColumnTemplate>    
+                    </rv:RecordViewColumn>
+                    <rv:RecordViewColumn Title="Data01" PropertyName="Data01" IsFixedColumn="True" Width="100"/>
+                    <rv:RecordViewColumn Title="Data02" PropertyName="Data02" Width="100"/>
+                    <rv:RecordViewColumn Title="Data03" PropertyName="Data03" Width="100"/>
+                    <rv:RecordViewColumn Title="Data04" PropertyName="Data04" Width="100"/>
+                    <rv:RecordViewColumn Title="Data05" PropertyName="Data05" Width="100"/>
+                </rv:RecordView.Columns>
+            </rv:RecordView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
