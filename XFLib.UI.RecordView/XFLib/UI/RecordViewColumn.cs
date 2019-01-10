@@ -23,15 +23,15 @@ namespace XFLib.UI
 
         public static readonly BindableProperty TitleProperty =
             BindableProperty.Create(nameof(Title), typeof(string), typeof(RecordViewColumn), string.Empty,
-                propertyChanged: (b, o, n) => { if (o != n) (b as RecordViewColumn).TitleLabel.Text = (string)n; });
+                propertyChanged: (b, o, n) => { if (o != n) (b as RecordViewColumn).TitleLabel.ColmnName = (string)n; });
 
         //public static readonly BindableProperty FormattedTitleProperty =
         //    BindableProperty.Create(nameof(FormattedTitle), typeof(FormattedString), typeof(RecordViewColumn),
         //        propertyChanged: (b, o, n) => (b as RecordViewColumn).HeaderLabel.FormattedText = (FormattedString)n);
 
         public static readonly BindableProperty PropertyNameProperty =
-            BindableProperty.Create(nameof(PropertyName), typeof(string), typeof(RecordViewColumn), string.Empty,
-                propertyChanged: (b, o, n) => { if (o != n) (b as RecordViewColumn).TitleLabel.ColmnName = (string)n; });
+            BindableProperty.Create(nameof(PropertyName), typeof(string), typeof(RecordViewColumn), string.Empty);
+                ///propertyChanged: (b, o, n) => { if (o != n) (b as RecordViewColumn).TitleLabel.ColmnName = (string)n; });
 
         public static readonly BindableProperty IsFixedColumnProperty =
             BindableProperty.Create(nameof(IsFixedColumn), typeof(bool), typeof(RecordViewColumn), false);
@@ -168,8 +168,8 @@ namespace XFLib.UI
                 Margin                  = new Thickness(0),
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment   = TextAlignment.Center,
-                HorizontalOptions       = LayoutOptions.CenterAndExpand,
-                VerticalOptions         = LayoutOptions.CenterAndExpand
+                //HorizontalOptions       = LayoutOptions.CenterAndExpand,
+                //VerticalOptions         = LayoutOptions.CenterAndExpand
             };
         }
 

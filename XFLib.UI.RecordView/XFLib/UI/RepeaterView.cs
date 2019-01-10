@@ -226,7 +226,7 @@ namespace XFLib.UI
                     var tapGestureRecognizer = new TapGestureRecognizer();
                     //tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandProperty, "TapCommand");
                     // Tap時イベント。選択物の変更/解除
-                    tapGestureRecognizer.Command = new Command(x => UpdateSelectedItemByTap(view.BindingContext, view));
+                    tapGestureRecognizer.Command = new Xamarin.Forms.Command(x => UpdateSelectedItemByTap(view.BindingContext, view));
                     // BindingされたItemのユニークなKey名を登録
                     tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandParameterProperty, UniqueId);
                     view.GestureRecognizers.Add(tapGestureRecognizer);

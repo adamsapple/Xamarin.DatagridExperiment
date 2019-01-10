@@ -6,7 +6,8 @@
     <SharedGUID>daeea701-09a2-4961-b7f6-df056a100f85</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>XFLib.UI.Droid</Import_RootNamespace>
+    <Import_RootNamespace>
+    </Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)XFLib\UI\HideHBarScrollViewRenderer.cs" />

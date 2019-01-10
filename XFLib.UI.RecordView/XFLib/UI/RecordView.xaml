@@ -85,6 +85,7 @@
                                      SelectionEnabled="{Binding SelectionEnabled, Source={x:Reference self}}"
                                      Grid.Column="0" Grid.Row="0"
                                      BackgroundColor="{Binding FixedColumnBackgroundColor, Source={x:Reference self}}"
+                                     UniqueId="{Binding UniquePropertyName, Source={x:Reference self}}"
                                      Spacing="0" Padding="0" Margin="0">
                         <ui:RepeaterView.ItemTemplate>
                             <DataTemplate >

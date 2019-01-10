@@ -231,7 +231,7 @@ namespace XFLib.UI
             BodyElement       = bodyGrid;
 
             
-            TapCommand = new Command(x =>
+            TapCommand = new Xamarin.Forms.Command(x =>
             {
                 System.Diagnostics.Debug.WriteLine(x);
                 TapRow(x);
@@ -356,20 +356,22 @@ namespace XFLib.UI
                 return;
             }
 
+            var propName = Columns.Where(x => column == x.Title).First().PropertyName;
+
             var sortData = masterListView.SortData;
 
             //
             // 押下したヘッダによる処理
             // 同じヘッダならソート方法の変更、違うヘッダなら昇順。
             //
-            if (column.Equals(sortData.PropertyName))
+            if (propName.Equals(sortData.PropertyName))
             {
                 var val = ((int)sortData.Order + 1) % 3;
                 sortData.Order = (SortingOrder)Enum.ToObject(typeof(SortingOrder), val);
             }
             else
             {
-                sortData.PropertyName = column;
+                sortData.PropertyName = propName;
                 sortData.Order        = SortingOrder.Ascendant;
             }
 
@@ -381,7 +383,7 @@ namespace XFLib.UI
             //
             foreach (var header in headers)
             {
-                if (header.ColmnName.Equals(sortData.PropertyName))
+                if (header.ColmnName.Equals(column))
                 {
                     header.SortingOrder = sortData.Order;
                 }

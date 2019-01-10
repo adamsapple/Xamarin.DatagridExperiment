@@ -65,7 +65,7 @@ namespace XFLib.UI.Droid
         {
             return false;   // return base.OnTouchEvent (e);
         }
-        public override bool OnInterceptTouchEvent(Android.Views.MotionEvent ev)
+        public override bool OnInterceptTouchEvent(global::Android.Views.MotionEvent ev)
         {
             return false;   // base.OnInterceptTouchEvent(ev);
         }

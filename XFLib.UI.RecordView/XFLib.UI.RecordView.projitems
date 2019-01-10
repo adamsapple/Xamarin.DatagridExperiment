@@ -6,7 +6,8 @@
     <SharedGUID>30e7c08d-2175-4503-8f34-01211d4dde88</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>XFLib.UI</Import_RootNamespace>
+    <Import_RootNamespace>
+    </Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)XFLib\UI\RecordView.xaml">
