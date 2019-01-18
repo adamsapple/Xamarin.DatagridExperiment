@@ -46,7 +46,10 @@ namespace XFLib.UI
 
                     if (newValue is INotifyCollectionChanged newNcc)
                     {
-                        newNcc.CollectionChanged += self.OnCollectionChanged;
+                        if (!self.IsSlave)
+                        {
+                            newNcc.CollectionChanged += self.OnCollectionChanged;
+                        }
                     }
 
                     Populate(bindable);
@@ -569,9 +572,76 @@ namespace XFLib.UI
             //if (self == null) {
             //    return;
             //}
+
+            //Populate(this);
+
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    AddChildren(e);
+                    return;
+                    
+                case NotifyCollectionChangedAction.Move:
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    break;
+            }
+
             Populate(this);
         }
 
+
+        private void AddChildren(NotifyCollectionChangedEventArgs e)
+        {
+            var items = e.NewItems;
+            var id    = e.NewStartingIndex;
+            foreach (var viewModel in items)
+            {
+                //var content = this.ItemTemplate.CreateContent();
+                //BindableObject bindableObject = (BindableObject)(content = (View)ItemTemplate.CreateContent(viewModel, this));
+                var content = ItemTemplate.CreateContent(viewModel, this);
+                //var content = this.ItemTemplate.();
+                var view = content is View ? content as View : (content as ViewCell).View;
+
+                if (view == null)
+                {
+                    throw new Exception($"Invalid visual object {nameof(content)}");
+                }
+
+                view.BackgroundColor = (Children.Count() % 2 == 0) ? Color.Transparent : EvenRowBackgroundColor;
+                view.BindingContext  = viewModel;
+
+                if (!view.GestureRecognizers.Any())
+                {
+                    ////
+                    /// Tapイベントの登録 (選択物の更新)
+                    //
+                    var tapGestureRecognizer = new TapGestureRecognizer();
+                    //tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandProperty, "TapCommand");
+                    // Tap時イベント。選択物の変更/解除
+                    tapGestureRecognizer.Command = new Xamarin.Forms.Command(x => UpdateSelectedItemByTap(view.BindingContext, view));
+                    // BindingされたItemのユニークなKey名を登録
+                    tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandParameterProperty, UniqueId);
+                    view.GestureRecognizers.Add(tapGestureRecognizer);
+                }
+
+                this.Children.Insert(id++, view);
+            }
+
+            foreach (var slave in Slaves)
+            {
+                slave.AddChildren(e);
+            }
+        }
+
+        private void MobeChildren()
+        {
+
+        }
 
         public SortData SortData = new SortData();
 
