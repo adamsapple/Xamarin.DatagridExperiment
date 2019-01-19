@@ -21,7 +21,7 @@ namespace XFLib.UI
         /// Bindable Property for UniqueId.
         /// </summary>
         public static readonly BindableProperty UniqueIdProperty =
-            BindableProperty.Create(nameof(ItemTemplate), typeof(string), typeof(RepeaterView), defaultValue: "Id");
+            BindableProperty.Create(nameof(UniqueId), typeof(string), typeof(RepeaterView), defaultValue: "Id");
 
         /// <summary>
         /// The item template property.
