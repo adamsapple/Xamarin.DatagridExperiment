@@ -566,6 +566,11 @@ namespace XFLib.UI
             return SelectedIndex;
         }
 
+        /// <summary>
+        /// Collection changed event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             //var self = sender as RepeaterView;
@@ -594,7 +599,10 @@ namespace XFLib.UI
             Populate(this);
         }
 
-
+        /// <summary>
+        /// Add Collection.
+        /// </summary>
+        /// <param name="e"></param>
         private void AddChildren(NotifyCollectionChangedEventArgs e)
         {
             var items = e.NewItems;
@@ -612,7 +620,8 @@ namespace XFLib.UI
                     throw new Exception($"Invalid visual object {nameof(content)}");
                 }
 
-                view.BackgroundColor = (Children.Count() % 2 == 0) ? Color.Transparent : EvenRowBackgroundColor;
+                //view.BackgroundColor = (Children.Count() % 2 == 0) ? Color.Transparent : EvenRowBackgroundColor;
+                view.BackgroundColor = (id % 2 == 0) ? Color.Transparent : EvenRowBackgroundColor;
                 view.BindingContext  = viewModel;
 
                 if (!view.GestureRecognizers.Any())
@@ -638,7 +647,7 @@ namespace XFLib.UI
             }
         }
 
-        private void MobeChildren()
+        private void MoveChildren()
         {
 
         }
