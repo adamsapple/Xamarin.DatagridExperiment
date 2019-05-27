@@ -69,7 +69,8 @@ namespace ListViewTest01.UI
         /// </summary>
         public static BindableProperty SelectedItemProperty =
             BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(RecordView),
-                propertyChanged: (b, o, n) => { if (o != n) (b as RecordView)?.ItemSelected?.Invoke(b, new SelectedItemChangedEventArgs(n)); } );
+                propertyChanged: (b, o, n) => { if (o != n) (b as RecordView)?.ItemSelected?.Invoke(b, new SelectedItemChangedEventArgs(n, (b as RecordView).SelectedIndex)); } );
+                //propertyChanged: (b, o, n) => { if (o != n) (b as RecordView)?.ItemSelected?.Invoke(b, new SelectedItemChangedEventArgs(n)); });
 
         /// <summary>
         /// SelectedIndexProperty

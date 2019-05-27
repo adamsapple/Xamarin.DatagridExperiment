@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ListViewTest01
 {
-    class MyRepeater : XLabs.Forms.Controls.RepeaterView<ListViewItem>
-    {
-    }
+    //class MyRepeater : XLabs.Forms.Controls.RepeaterView<ListViewItem>
+    //{
+    //}
 }
