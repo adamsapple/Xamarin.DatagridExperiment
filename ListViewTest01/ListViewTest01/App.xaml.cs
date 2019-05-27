@@ -11,7 +11,7 @@ namespace ListViewTest01
 		{
 			InitializeComponent();
 
-            Xamarin.Forms.DataGrid.DataGridComponent.Init();
+            //Xamarin.Forms.DataGrid.DataGridComponent.Init();
 
             MainPage = new Page5();
 		}

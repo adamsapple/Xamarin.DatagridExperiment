@@ -3,7 +3,8 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
-using Xamarin.Forms.DataGrid;
+using ListViewTest01.UI;
+//using Xamarin.Forms.DataGrid;
 
 namespace ListViewTest01
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.DataGrid;
+//using Xamarin.Forms.DataGrid;
 
 namespace ListViewTest01
 {
@@ -17,11 +17,11 @@ namespace ListViewTest01
 
         private void DataGrid1_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            if(sender is DataGrid grid)
-            {
-                grid.SelectedItem = null;
-                //grid.SelectedItem = null;
-            }
+            //if(sender is DataGrid grid)
+            //{
+            //    grid.SelectedItem = null;
+            //    //grid.SelectedItem = null;
+            //}
         }
 
         private void Button_Clicked(object sender, EventArgs e)

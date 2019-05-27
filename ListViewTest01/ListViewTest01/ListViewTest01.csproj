@@ -5,21 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MainPage.xaml.cs" />
     <Compile Remove="Page1.xaml.cs" />
     <Compile Remove="Page3.xaml.cs" />
     <Compile Remove="Page4.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="MainPage.xaml" />
     <EmbeddedResource Remove="Page1.xaml" />
     <EmbeddedResource Remove="Page3.xaml" />
     <EmbeddedResource Remove="Page4.xaml" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CarouselView.FormsPlugin" Version="5.2.0" />
     <PackageReference Include="Xamarin.Forms" Version="4.0.0.425677" />
-    <PackageReference Include="Xamarin.Forms.DataGrid" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
